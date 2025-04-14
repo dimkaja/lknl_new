@@ -13,6 +13,14 @@ class ModelToolImage extends Model {
 
 		$extension = pathinfo($filename, PATHINFO_EXTENSION);
 
+		if('svg' == $extension || 'webp' == $extension) {
+            if ($this->request->server['HTTPS']) {
+                return HTTPS_SERVER . 'image/' . $filename;
+            } else {
+                return HTTP_SERVER . 'image/' . $filename;
+            }
+    	}
+
 		$image_old = $filename;
 		$image_new = 'cache/' . utf8_substr($filename, 0, utf8_strrpos($filename, '.')) . '-' . (int)$width . 'x' . (int)$height . '.' . $extension;
 $image_new_webp = 'cachewebp/' . utf8_substr($filename, 0, utf8_strrpos($filename, '.')) . '-' . (int)$width . 'x' . (int)$height . '.webp';

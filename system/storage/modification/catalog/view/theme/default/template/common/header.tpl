@@ -19,15 +19,12 @@
 <?php } ?>
 
 <script src="catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
-<link href="catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
-<script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-<link href="//fonts.googleapis.com/css?family=Open+Sans:400,400i,300,700" rel="stylesheet" type="text/css" />
-<link href="catalog/view/theme/default/stylesheet/stylesheet.css" rel="stylesheet">
+
+<link href="catalog/view/theme/default/stylesheet/stylesheet.css?v=<?php echo rand(1,57935673576); ?>" rel="stylesheet">
 <?php foreach ($styles as $style) { ?>
 <link href="<?php echo $style['href']; ?>" type="text/css" rel="<?php echo $style['rel']; ?>" media="<?php echo $style['media']; ?>" />
 <?php } ?>
-<script src="catalog/view/javascript/common.js" type="text/javascript"></script>
+<script src="catalog/view/javascript/common.js?v=<?php echo rand(1,57935673576); ?>" type="text/javascript"></script>
 <?php foreach ($links as $link) { ?>
 <link href="<?php echo $link['href']; ?>" rel="<?php echo $link['rel']; ?>" />
 <?php } ?>
@@ -37,5 +34,61 @@
 <?php foreach ($analytics as $analytic) { ?>
 <?php echo $analytic; ?>
 <?php } ?>
+
+<meta name="robots" content="noindex,nofollow"/> 
+
 </head>
 <body class="<?php echo $class; ?>">
+
+<header>
+    <div class="header_box">
+        <div class="header_item logo">
+            <?php if ($logo) { ?>
+                <?php if ($home == $og_url) { ?>
+                  <img src="<?php echo $logo; ?>" title="<?php echo $name; ?>" alt="<?php echo $name; ?>" class="img-responsive" />
+                <?php } else { ?>
+                  <a href="<?php echo $home; ?>"><img src="<?php echo $logo; ?>" title="<?php echo $name; ?>" alt="<?php echo $name; ?>" class="img-responsive" /></a>
+                <?php } ?>
+              <?php } else { ?>
+                <h1><a href="<?php echo $home; ?>"><?php echo $name; ?></a></h1>
+            <?php } ?>
+        </div>
+        <div class="header_item btns">
+            <div class="search_btn">
+                <?php echo $search; ?>
+            </div>
+            <div class="menu">
+       
+                      <nav id="menu" class="navbar">
+                        <div class="menu_btn">
+                            <img src="/image/menu.svg" alt="Menu" />
+                        </div>
+          
+                          <ul class="nav navbar-nav">
+                            <?php foreach ($categories as $category) { ?>
+                            <?php if ($category['children']) { ?>
+                            <li class="dropdown"><a href="<?php echo $category['href']; ?>" class="dropdown-toggle" data-toggle="dropdown"><?php echo $category['name']; ?></a>
+                              <div class="dropdown-menu">
+                                <div class="dropdown-inner">
+                                  <?php foreach (array_chunk($category['children'], ceil(count($category['children']) / $category['column'])) as $children) { ?>
+                                  <ul class="list-unstyled">
+                                    <?php foreach ($children as $child) { ?>
+                                    <li><a href="<?php echo $child['href']; ?>"><?php echo $child['name']; ?></a></li>
+                                    <?php } ?>
+                                  </ul>
+                                  <?php } ?>
+                                </div>
+                                <a href="<?php echo $category['href']; ?>" class="see-all"><?php echo $text_all; ?> <?php echo $category['name']; ?></a> </div>
+                            </li>
+                            <?php } else { ?>
+                            <li><a href="<?php echo $category['href']; ?>"><?php echo $category['name']; ?></a></li>
+                            <?php } ?>
+                            <?php } ?>
+                          </ul>
+                   
+                      </nav>
+        
+            </div>
+        </div>
+    </div>
+</header>

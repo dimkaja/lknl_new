@@ -13,7 +13,9 @@ class ControllerExtensionModuleBanner extends Controller {
 		$data['banners'] = array();
 
 		$results = $this->model_design_banner->getBanner($setting['banner_id']);
-
+		echo '<pre>';
+		print_r($results);
+		echo '</pre>';
 		foreach ($results as $result) {
 			if (is_file(DIR_IMAGE . $result['image'])) {
 				$data['banners'][] = array(
@@ -23,6 +25,8 @@ class ControllerExtensionModuleBanner extends Controller {
 				);
 			}
 		}
+
+	
 
 		$data['module'] = $module++;
 

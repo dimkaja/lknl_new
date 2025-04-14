@@ -121,4 +121,11 @@ function addImage(language_id) {
 $('#language a:first').tab('show');
 //--></script> 
 </div>
+
+
+<style>
+  .img-thumbnail img  {
+    max-width: 150px;
+  }  
+</style>
 <?php echo $footer; ?> 

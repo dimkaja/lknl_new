@@ -13,6 +13,14 @@ class ModelToolImage extends Model {
 
 		$extension = pathinfo($filename, PATHINFO_EXTENSION);
 
+		if('svg' == $extension || 'webp' == $extension) {
+            if ($this->request->server['HTTPS']) {
+                return HTTPS_CATALOG . 'image/' . $filename;
+            } else {
+                return HTTP_CATALOG . 'image/' . $filename;
+            }
+    	}
+
 		if('svg' == $extension) {
             if ($this->request->server['HTTPS']) {
                 return HTTPS_CATALOG . 'image/' . $filename;

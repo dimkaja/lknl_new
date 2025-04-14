@@ -70,7 +70,7 @@ class ControllerCommonFileManager extends Controller {
 			}
 
 			// Get files
-			$files = glob($directory . '/' . $filter_name . '*.{jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF,svg,SVG]}', GLOB_BRACE);
+			$files = glob($directory . '/' . $filter_name . '*.{jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF,svg,SVG,webp,WEBP,svg,SVG]}', GLOB_BRACE);
 
 			if (!$files) {
 				$files = array();
@@ -302,6 +302,7 @@ class ControllerCommonFileManager extends Controller {
 					// Allowed file extension types
 					$allowed = array(
 						'jpg',
+						'svg','webp',
 						'svg',
 						'jpeg',
 						'gif',
@@ -315,6 +316,7 @@ class ControllerCommonFileManager extends Controller {
 					// Allowed file mime types
 					$allowed = array(
 						'image/jpeg',
+						'image/svg+xml','image/webp',
 						'image/svg+xml',
 						'image/pjpeg',
 						'image/png',
