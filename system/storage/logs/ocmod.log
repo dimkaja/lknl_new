@@ -77,3 +77,1077 @@ FILE: catalog/view/theme/default/template/account/order_info.tpl
 CODE: <b><?php echo $text_shipping_method; ?></b> <?php echo $shipping_method; ?>
 LINE: 49
 ----------------------------------------------------------------
+2025-04-14 23:16:14 - MOD: Modification Default
+
+FILE: system/engine/action.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 41
+
+FILE: system/engine/loader.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 49
+LINE: 108
+LINE: 120
+LINE: 165
+
+FILE: system/library/config.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 23
+
+FILE: system/library/language.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 38
+LINE: 40
+LINE: 49
+LINE: 51
+LINE: 60
+LINE: 62
+
+FILE: system/library/template/php.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 18
+
+FILE: system/library/template/tiwg.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 24
+----------------------------------------------------------------
+MOD: fondy_payment
+
+FILE: catalog/controller/checkout/checkout.php
+CODE: public function index() {
+LINE: 11
+
+FILE: catalog/view/theme/default/template/checkout/checkout.tpl
+CODE: <h1><?php echo $heading_title; ?></h1>
+LINE: 26
+----------------------------------------------------------------
+MOD: OcStore 2.3.x track number
+
+FILE: admin/controller/sale/order.php
+CODE: $data['shipping_method'] = $order_info['shipping_method'];
+LINE: 567
+LINE: 942
+CODE: public function history() {
+LINE: 1545
+
+FILE: admin/model/sale/order.php
+CODE: $order_query->row['order_id'],
+LINE: 96
+
+FILE: catalog/model/checkout/order.php
+CODE: $order_query->row['order_id'],
+LINE: 170
+
+FILE: admin/view/template/sale/order_info.tpl
+CODE: <td><?php echo $text_reward; ?></td>
+LINE: 100
+CODE: <?php echo $footer; ?>
+LINE: 700
+
+FILE: catalog/model/account/order.php
+CODE: $order_query->row['order_id'],
+LINE: 46
+
+FILE: catalog/controller/account/order.php
+CODE: if ($order_info['invoice_no']) {
+LINE: 210
+
+FILE: catalog/view/theme/default/template/account/order_info.tpl
+CODE: <b><?php echo $text_shipping_method; ?></b> <?php echo $shipping_method; ?>
+LINE: 49
+----------------------------------------------------------------
+MOD: WebP with GD OcStore2.3
+
+FILE: catalog/view/theme/default/template/common/header.tpl
+CODE: <meta property="og:title" content="<?php echo $title; ?>" />
+LINE: 19
+
+FILE: catalog/model/tool/image.php
+CODE: $image_new = 'cache/'
+LINE: 17
+CODE: $imagepath_parts = explode('/', $image_new);
+LINE: 70
+
+FILE: system/library/image.php
+CODE: public function save($file, $quality = 90) {
+LINE: 64
+
+FILE: system/library/response.php
+CODE: private function compress($data, $level = 0)
+LINE: 49
+CODE: $output = $this
+LINE: 82
+----------------------------------------------------------------
+MOD: Local copy OCMOD
+
+FILE: admin/controller/extension/installer.php
+CODE: 'url'  => str_replace('&amp;', '&', $this->url->link('extension/installer/ftp', 'token=' . $this->session->data['token'],
+LINE: 131
+CODE: public function unzip() {
+LINE: 292
+----------------------------------------------------------------
+MOD: SVG-support
+
+FILE: admin/controller/common/filemanager.php
+CODE: jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF
+LINE: 72
+CODE: 'jpg',
+LINE: 304
+CODE: 'image/jpeg',
+LINE: 317
+
+FILE: admin/model/tool/image.php
+CODE: $extension = pathinfo($filename, PATHINFO_EXTENSION);
+LINE: 21
+----------------------------------------------------------------
+2025-04-14 23:16:25 - MOD: Modification Default
+
+FILE: system/engine/action.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 41
+
+FILE: system/engine/loader.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 49
+LINE: 108
+LINE: 120
+LINE: 165
+
+FILE: system/library/config.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 23
+
+FILE: system/library/language.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 38
+LINE: 40
+LINE: 49
+LINE: 51
+LINE: 60
+LINE: 62
+
+FILE: system/library/template/php.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 18
+
+FILE: system/library/template/tiwg.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 24
+----------------------------------------------------------------
+MOD: fondy_payment
+
+FILE: catalog/controller/checkout/checkout.php
+CODE: public function index() {
+LINE: 11
+
+FILE: catalog/view/theme/default/template/checkout/checkout.tpl
+CODE: <h1><?php echo $heading_title; ?></h1>
+LINE: 26
+----------------------------------------------------------------
+MOD: OcStore 2.3.x track number
+
+FILE: admin/controller/sale/order.php
+CODE: $data['shipping_method'] = $order_info['shipping_method'];
+LINE: 567
+LINE: 942
+CODE: public function history() {
+LINE: 1545
+
+FILE: admin/model/sale/order.php
+CODE: $order_query->row['order_id'],
+LINE: 96
+
+FILE: catalog/model/checkout/order.php
+CODE: $order_query->row['order_id'],
+LINE: 170
+
+FILE: admin/view/template/sale/order_info.tpl
+CODE: <td><?php echo $text_reward; ?></td>
+LINE: 100
+CODE: <?php echo $footer; ?>
+LINE: 700
+
+FILE: catalog/model/account/order.php
+CODE: $order_query->row['order_id'],
+LINE: 46
+
+FILE: catalog/controller/account/order.php
+CODE: if ($order_info['invoice_no']) {
+LINE: 210
+
+FILE: catalog/view/theme/default/template/account/order_info.tpl
+CODE: <b><?php echo $text_shipping_method; ?></b> <?php echo $shipping_method; ?>
+LINE: 49
+----------------------------------------------------------------
+MOD: WebP with GD OcStore2.3
+
+FILE: catalog/view/theme/default/template/common/header.tpl
+CODE: <meta property="og:title" content="<?php echo $title; ?>" />
+LINE: 19
+
+FILE: catalog/model/tool/image.php
+CODE: $image_new = 'cache/'
+LINE: 17
+CODE: $imagepath_parts = explode('/', $image_new);
+LINE: 70
+
+FILE: system/library/image.php
+CODE: public function save($file, $quality = 90) {
+LINE: 64
+
+FILE: system/library/response.php
+CODE: private function compress($data, $level = 0)
+LINE: 49
+CODE: $output = $this
+LINE: 82
+----------------------------------------------------------------
+MOD: Local copy OCMOD
+
+FILE: admin/controller/extension/installer.php
+CODE: 'url'  => str_replace('&amp;', '&', $this->url->link('extension/installer/ftp', 'token=' . $this->session->data['token'],
+LINE: 131
+CODE: public function unzip() {
+LINE: 292
+----------------------------------------------------------------
+MOD: SVG-support
+
+FILE: admin/controller/common/filemanager.php
+CODE: jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF
+LINE: 72
+CODE: 'jpg',
+LINE: 304
+CODE: 'image/jpeg',
+LINE: 317
+
+FILE: admin/model/tool/image.php
+CODE: $extension = pathinfo($filename, PATHINFO_EXTENSION);
+LINE: 21
+----------------------------------------------------------------
+2025-04-14 23:16:27 - MOD: Modification Default
+
+FILE: system/engine/action.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 41
+
+FILE: system/engine/loader.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 49
+LINE: 108
+LINE: 120
+LINE: 165
+
+FILE: system/library/config.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 23
+
+FILE: system/library/language.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 38
+LINE: 40
+LINE: 49
+LINE: 51
+LINE: 60
+LINE: 62
+
+FILE: system/library/template/php.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 18
+
+FILE: system/library/template/tiwg.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 24
+----------------------------------------------------------------
+MOD: fondy_payment
+
+FILE: catalog/controller/checkout/checkout.php
+CODE: public function index() {
+LINE: 11
+
+FILE: catalog/view/theme/default/template/checkout/checkout.tpl
+CODE: <h1><?php echo $heading_title; ?></h1>
+LINE: 26
+----------------------------------------------------------------
+MOD: OcStore 2.3.x track number
+
+FILE: admin/controller/sale/order.php
+CODE: $data['shipping_method'] = $order_info['shipping_method'];
+LINE: 567
+LINE: 942
+CODE: public function history() {
+LINE: 1545
+
+FILE: admin/model/sale/order.php
+CODE: $order_query->row['order_id'],
+LINE: 96
+
+FILE: catalog/model/checkout/order.php
+CODE: $order_query->row['order_id'],
+LINE: 170
+
+FILE: admin/view/template/sale/order_info.tpl
+CODE: <td><?php echo $text_reward; ?></td>
+LINE: 100
+CODE: <?php echo $footer; ?>
+LINE: 700
+
+FILE: catalog/model/account/order.php
+CODE: $order_query->row['order_id'],
+LINE: 46
+
+FILE: catalog/controller/account/order.php
+CODE: if ($order_info['invoice_no']) {
+LINE: 210
+
+FILE: catalog/view/theme/default/template/account/order_info.tpl
+CODE: <b><?php echo $text_shipping_method; ?></b> <?php echo $shipping_method; ?>
+LINE: 49
+----------------------------------------------------------------
+MOD: WebP with GD OcStore2.3
+
+FILE: catalog/view/theme/default/template/common/header.tpl
+CODE: <meta property="og:title" content="<?php echo $title; ?>" />
+LINE: 19
+
+FILE: catalog/model/tool/image.php
+CODE: $image_new = 'cache/'
+LINE: 17
+CODE: $imagepath_parts = explode('/', $image_new);
+LINE: 70
+
+FILE: system/library/image.php
+CODE: public function save($file, $quality = 90) {
+LINE: 64
+
+FILE: system/library/response.php
+CODE: private function compress($data, $level = 0)
+LINE: 49
+CODE: $output = $this
+LINE: 82
+----------------------------------------------------------------
+MOD: Local copy OCMOD
+
+FILE: admin/controller/extension/installer.php
+CODE: 'url'  => str_replace('&amp;', '&', $this->url->link('extension/installer/ftp', 'token=' . $this->session->data['token'],
+LINE: 131
+CODE: public function unzip() {
+LINE: 292
+----------------------------------------------------------------
+MOD: SVG-support
+
+FILE: admin/controller/common/filemanager.php
+CODE: jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF
+LINE: 72
+CODE: 'jpg',
+LINE: 304
+CODE: 'image/jpeg',
+LINE: 317
+
+FILE: admin/model/tool/image.php
+CODE: $extension = pathinfo($filename, PATHINFO_EXTENSION);
+LINE: 21
+----------------------------------------------------------------
+2025-04-14 23:16:45 - MOD: Modification Default
+
+FILE: system/engine/action.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 41
+
+FILE: system/engine/loader.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 49
+LINE: 108
+LINE: 120
+LINE: 165
+
+FILE: system/library/config.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 23
+
+FILE: system/library/language.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 38
+LINE: 40
+LINE: 49
+LINE: 51
+LINE: 60
+LINE: 62
+
+FILE: system/library/template/php.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 18
+
+FILE: system/library/template/tiwg.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 24
+----------------------------------------------------------------
+MOD: fondy_payment
+
+FILE: catalog/controller/checkout/checkout.php
+CODE: public function index() {
+LINE: 11
+
+FILE: catalog/view/theme/default/template/checkout/checkout.tpl
+CODE: <h1><?php echo $heading_title; ?></h1>
+LINE: 26
+----------------------------------------------------------------
+MOD: OcStore 2.3.x track number
+
+FILE: admin/controller/sale/order.php
+CODE: $data['shipping_method'] = $order_info['shipping_method'];
+LINE: 567
+LINE: 942
+CODE: public function history() {
+LINE: 1545
+
+FILE: admin/model/sale/order.php
+CODE: $order_query->row['order_id'],
+LINE: 96
+
+FILE: catalog/model/checkout/order.php
+CODE: $order_query->row['order_id'],
+LINE: 170
+
+FILE: admin/view/template/sale/order_info.tpl
+CODE: <td><?php echo $text_reward; ?></td>
+LINE: 100
+CODE: <?php echo $footer; ?>
+LINE: 700
+
+FILE: catalog/model/account/order.php
+CODE: $order_query->row['order_id'],
+LINE: 46
+
+FILE: catalog/controller/account/order.php
+CODE: if ($order_info['invoice_no']) {
+LINE: 210
+
+FILE: catalog/view/theme/default/template/account/order_info.tpl
+CODE: <b><?php echo $text_shipping_method; ?></b> <?php echo $shipping_method; ?>
+LINE: 49
+----------------------------------------------------------------
+MOD: WebP with GD OcStore2.3
+
+FILE: catalog/view/theme/default/template/common/header.tpl
+CODE: <meta property="og:title" content="<?php echo $title; ?>" />
+LINE: 19
+
+FILE: catalog/model/tool/image.php
+CODE: $image_new = 'cache/'
+LINE: 17
+CODE: $imagepath_parts = explode('/', $image_new);
+LINE: 70
+
+FILE: system/library/image.php
+CODE: public function save($file, $quality = 90) {
+LINE: 64
+
+FILE: system/library/response.php
+CODE: private function compress($data, $level = 0)
+LINE: 49
+CODE: $output = $this
+LINE: 82
+----------------------------------------------------------------
+MOD: Local copy OCMOD
+
+FILE: admin/controller/extension/installer.php
+CODE: 'url'  => str_replace('&amp;', '&', $this->url->link('extension/installer/ftp', 'token=' . $this->session->data['token'],
+LINE: 131
+CODE: public function unzip() {
+LINE: 292
+----------------------------------------------------------------
+MOD: SVG-support
+
+FILE: admin/controller/common/filemanager.php
+CODE: jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF
+LINE: 72
+CODE: 'jpg',
+LINE: 304
+CODE: 'image/jpeg',
+LINE: 317
+
+FILE: admin/model/tool/image.php
+CODE: $extension = pathinfo($filename, PATHINFO_EXTENSION);
+LINE: 21
+----------------------------------------------------------------
+MOD: OCMOD Editor for OpenCart 2.2 and 2.3
+
+FILE: admin/controller/extension/modification.php
+CODE: $data['refresh'] = $this->url->link('extension/modification/refresh', 'token=' . $this->session->data['token'] . $url, true);
+LINE: 660
+CODE: $data['modifications'][] = array(
+LINE: 682
+CODE: $data['tab_log'] = $this->language->get('tab_log');
+LINE: 727
+CODE: $this->response->redirect($this->url->link('extension/modification', 'token=' . $this->session->data['token'] . $url, true));
+LINE: 510
+
+FILE: admin/view/template/extension/modification.tpl
+CODE: <div class="pull-right">
+LINE: 5
+CODE: <?php if (!$modification['enabled']) { ?>
+LINE: 98
+----------------------------------------------------------------
+2025-04-14 23:16:48 - MOD: Modification Default
+
+FILE: system/engine/action.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 41
+
+FILE: system/engine/loader.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 49
+LINE: 108
+LINE: 120
+LINE: 165
+
+FILE: system/library/config.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 23
+
+FILE: system/library/language.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 38
+LINE: 40
+LINE: 49
+LINE: 51
+LINE: 60
+LINE: 62
+
+FILE: system/library/template/php.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 18
+
+FILE: system/library/template/tiwg.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 24
+----------------------------------------------------------------
+MOD: fondy_payment
+
+FILE: catalog/controller/checkout/checkout.php
+CODE: public function index() {
+LINE: 11
+
+FILE: catalog/view/theme/default/template/checkout/checkout.tpl
+CODE: <h1><?php echo $heading_title; ?></h1>
+LINE: 26
+----------------------------------------------------------------
+MOD: OcStore 2.3.x track number
+
+FILE: admin/controller/sale/order.php
+CODE: $data['shipping_method'] = $order_info['shipping_method'];
+LINE: 567
+LINE: 942
+CODE: public function history() {
+LINE: 1545
+
+FILE: admin/model/sale/order.php
+CODE: $order_query->row['order_id'],
+LINE: 96
+
+FILE: catalog/model/checkout/order.php
+CODE: $order_query->row['order_id'],
+LINE: 170
+
+FILE: admin/view/template/sale/order_info.tpl
+CODE: <td><?php echo $text_reward; ?></td>
+LINE: 100
+CODE: <?php echo $footer; ?>
+LINE: 700
+
+FILE: catalog/model/account/order.php
+CODE: $order_query->row['order_id'],
+LINE: 46
+
+FILE: catalog/controller/account/order.php
+CODE: if ($order_info['invoice_no']) {
+LINE: 210
+
+FILE: catalog/view/theme/default/template/account/order_info.tpl
+CODE: <b><?php echo $text_shipping_method; ?></b> <?php echo $shipping_method; ?>
+LINE: 49
+----------------------------------------------------------------
+MOD: WebP with GD OcStore2.3
+
+FILE: catalog/view/theme/default/template/common/header.tpl
+CODE: <meta property="og:title" content="<?php echo $title; ?>" />
+LINE: 19
+
+FILE: catalog/model/tool/image.php
+CODE: $image_new = 'cache/'
+LINE: 17
+CODE: $imagepath_parts = explode('/', $image_new);
+LINE: 70
+
+FILE: system/library/image.php
+CODE: public function save($file, $quality = 90) {
+LINE: 64
+
+FILE: system/library/response.php
+CODE: private function compress($data, $level = 0)
+LINE: 49
+CODE: $output = $this
+LINE: 82
+----------------------------------------------------------------
+MOD: Local copy OCMOD
+
+FILE: admin/controller/extension/installer.php
+CODE: 'url'  => str_replace('&amp;', '&', $this->url->link('extension/installer/ftp', 'token=' . $this->session->data['token'],
+LINE: 131
+CODE: public function unzip() {
+LINE: 292
+----------------------------------------------------------------
+MOD: SVG-support
+
+FILE: admin/controller/common/filemanager.php
+CODE: jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF
+LINE: 72
+CODE: 'jpg',
+LINE: 304
+CODE: 'image/jpeg',
+LINE: 317
+
+FILE: admin/model/tool/image.php
+CODE: $extension = pathinfo($filename, PATHINFO_EXTENSION);
+LINE: 21
+----------------------------------------------------------------
+MOD: OCMOD Editor for OpenCart 2.2 and 2.3
+
+FILE: admin/controller/extension/modification.php
+CODE: $data['refresh'] = $this->url->link('extension/modification/refresh', 'token=' . $this->session->data['token'] . $url, true);
+LINE: 660
+CODE: $data['modifications'][] = array(
+LINE: 682
+CODE: $data['tab_log'] = $this->language->get('tab_log');
+LINE: 727
+CODE: $this->response->redirect($this->url->link('extension/modification', 'token=' . $this->session->data['token'] . $url, true));
+LINE: 510
+
+FILE: admin/view/template/extension/modification.tpl
+CODE: <div class="pull-right">
+LINE: 5
+CODE: <?php if (!$modification['enabled']) { ?>
+LINE: 98
+----------------------------------------------------------------
+2025-04-14 23:16:51 - MOD: Modification Default
+
+FILE: system/engine/action.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 41
+
+FILE: system/engine/loader.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 49
+LINE: 108
+LINE: 120
+LINE: 165
+
+FILE: system/library/config.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 23
+
+FILE: system/library/language.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 38
+LINE: 40
+LINE: 49
+LINE: 51
+LINE: 60
+LINE: 62
+
+FILE: system/library/template/php.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 18
+
+FILE: system/library/template/tiwg.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 24
+----------------------------------------------------------------
+MOD: fondy_payment
+
+FILE: catalog/controller/checkout/checkout.php
+CODE: public function index() {
+LINE: 11
+
+FILE: catalog/view/theme/default/template/checkout/checkout.tpl
+CODE: <h1><?php echo $heading_title; ?></h1>
+LINE: 26
+----------------------------------------------------------------
+MOD: OcStore 2.3.x track number
+
+FILE: admin/controller/sale/order.php
+CODE: $data['shipping_method'] = $order_info['shipping_method'];
+LINE: 567
+LINE: 942
+CODE: public function history() {
+LINE: 1545
+
+FILE: admin/model/sale/order.php
+CODE: $order_query->row['order_id'],
+LINE: 96
+
+FILE: catalog/model/checkout/order.php
+CODE: $order_query->row['order_id'],
+LINE: 170
+
+FILE: admin/view/template/sale/order_info.tpl
+CODE: <td><?php echo $text_reward; ?></td>
+LINE: 100
+CODE: <?php echo $footer; ?>
+LINE: 700
+
+FILE: catalog/model/account/order.php
+CODE: $order_query->row['order_id'],
+LINE: 46
+
+FILE: catalog/controller/account/order.php
+CODE: if ($order_info['invoice_no']) {
+LINE: 210
+
+FILE: catalog/view/theme/default/template/account/order_info.tpl
+CODE: <b><?php echo $text_shipping_method; ?></b> <?php echo $shipping_method; ?>
+LINE: 49
+----------------------------------------------------------------
+MOD: WebP with GD OcStore2.3
+
+FILE: catalog/view/theme/default/template/common/header.tpl
+CODE: <meta property="og:title" content="<?php echo $title; ?>" />
+LINE: 19
+
+FILE: catalog/model/tool/image.php
+CODE: $image_new = 'cache/'
+LINE: 17
+CODE: $imagepath_parts = explode('/', $image_new);
+LINE: 70
+
+FILE: system/library/image.php
+CODE: public function save($file, $quality = 90) {
+LINE: 64
+
+FILE: system/library/response.php
+CODE: private function compress($data, $level = 0)
+LINE: 49
+CODE: $output = $this
+LINE: 82
+----------------------------------------------------------------
+MOD: Local copy OCMOD
+
+FILE: admin/controller/extension/installer.php
+CODE: 'url'  => str_replace('&amp;', '&', $this->url->link('extension/installer/ftp', 'token=' . $this->session->data['token'],
+LINE: 131
+CODE: public function unzip() {
+LINE: 292
+----------------------------------------------------------------
+MOD: SVG-support
+
+FILE: admin/controller/common/filemanager.php
+CODE: jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF
+LINE: 72
+CODE: 'jpg',
+LINE: 304
+CODE: 'image/jpeg',
+LINE: 317
+
+FILE: admin/model/tool/image.php
+CODE: $extension = pathinfo($filename, PATHINFO_EXTENSION);
+LINE: 21
+----------------------------------------------------------------
+MOD: OCMOD Editor for OpenCart 2.2 and 2.3
+
+FILE: admin/controller/extension/modification.php
+CODE: $data['refresh'] = $this->url->link('extension/modification/refresh', 'token=' . $this->session->data['token'] . $url, true);
+LINE: 660
+CODE: $data['modifications'][] = array(
+LINE: 682
+CODE: $data['tab_log'] = $this->language->get('tab_log');
+LINE: 727
+CODE: $this->response->redirect($this->url->link('extension/modification', 'token=' . $this->session->data['token'] . $url, true));
+LINE: 510
+
+FILE: admin/view/template/extension/modification.tpl
+CODE: <div class="pull-right">
+LINE: 5
+CODE: <?php if (!$modification['enabled']) { ?>
+LINE: 98
+----------------------------------------------------------------
+2025-04-14 23:18:09 - MOD: Modification Default
+
+FILE: system/engine/action.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 41
+
+FILE: system/engine/loader.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 49
+LINE: 108
+LINE: 120
+LINE: 165
+
+FILE: system/library/config.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 23
+
+FILE: system/library/language.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 38
+LINE: 40
+LINE: 49
+LINE: 51
+LINE: 60
+LINE: 62
+
+FILE: system/library/template/php.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 18
+
+FILE: system/library/template/tiwg.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 24
+----------------------------------------------------------------
+MOD: fondy_payment
+
+FILE: catalog/controller/checkout/checkout.php
+CODE: public function index() {
+LINE: 11
+
+FILE: catalog/view/theme/default/template/checkout/checkout.tpl
+CODE: <h1><?php echo $heading_title; ?></h1>
+LINE: 26
+----------------------------------------------------------------
+MOD: OcStore 2.3.x track number
+
+FILE: admin/controller/sale/order.php
+CODE: $data['shipping_method'] = $order_info['shipping_method'];
+LINE: 567
+LINE: 942
+CODE: public function history() {
+LINE: 1545
+
+FILE: admin/model/sale/order.php
+CODE: $order_query->row['order_id'],
+LINE: 96
+
+FILE: catalog/model/checkout/order.php
+CODE: $order_query->row['order_id'],
+LINE: 170
+
+FILE: admin/view/template/sale/order_info.tpl
+CODE: <td><?php echo $text_reward; ?></td>
+LINE: 100
+CODE: <?php echo $footer; ?>
+LINE: 700
+
+FILE: catalog/model/account/order.php
+CODE: $order_query->row['order_id'],
+LINE: 46
+
+FILE: catalog/controller/account/order.php
+CODE: if ($order_info['invoice_no']) {
+LINE: 210
+
+FILE: catalog/view/theme/default/template/account/order_info.tpl
+CODE: <b><?php echo $text_shipping_method; ?></b> <?php echo $shipping_method; ?>
+LINE: 49
+----------------------------------------------------------------
+MOD: WebP with GD OcStore2.3
+
+FILE: catalog/view/theme/default/template/common/header.tpl
+CODE: <meta property="og:title" content="<?php echo $title; ?>" />
+LINE: 19
+
+FILE: catalog/model/tool/image.php
+CODE: $image_new = 'cache/'
+LINE: 17
+CODE: $imagepath_parts = explode('/', $image_new);
+LINE: 70
+
+FILE: system/library/image.php
+CODE: public function save($file, $quality = 90) {
+LINE: 64
+
+FILE: system/library/response.php
+CODE: private function compress($data, $level = 0)
+LINE: 49
+CODE: $output = $this
+LINE: 82
+----------------------------------------------------------------
+MOD: Local copy OCMOD
+
+FILE: admin/controller/extension/installer.php
+CODE: 'url'  => str_replace('&amp;', '&', $this->url->link('extension/installer/ftp', 'token=' . $this->session->data['token'],
+LINE: 131
+CODE: public function unzip() {
+LINE: 292
+----------------------------------------------------------------
+MOD: SVG-support
+
+FILE: admin/controller/common/filemanager.php
+CODE: jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF
+LINE: 72
+CODE: 'jpg',
+LINE: 304
+CODE: 'image/jpeg',
+LINE: 317
+
+FILE: admin/model/tool/image.php
+CODE: $extension = pathinfo($filename, PATHINFO_EXTENSION);
+LINE: 21
+----------------------------------------------------------------
+MOD: OCMOD Editor for OpenCart 2.2 and 2.3
+
+FILE: admin/controller/extension/modification.php
+CODE: $data['refresh'] = $this->url->link('extension/modification/refresh', 'token=' . $this->session->data['token'] . $url, true);
+LINE: 660
+CODE: $data['modifications'][] = array(
+LINE: 682
+CODE: $data['tab_log'] = $this->language->get('tab_log');
+LINE: 727
+CODE: $this->response->redirect($this->url->link('extension/modification', 'token=' . $this->session->data['token'] . $url, true));
+LINE: 510
+
+FILE: admin/view/template/extension/modification.tpl
+CODE: <div class="pull-right">
+LINE: 5
+CODE: <?php if (!$modification['enabled']) { ?>
+LINE: 98
+----------------------------------------------------------------
+2025-04-14 23:18:30 - MOD: Modification Default
+
+FILE: system/engine/action.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 41
+
+FILE: system/engine/loader.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 49
+LINE: 108
+LINE: 120
+LINE: 165
+
+FILE: system/library/config.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 23
+
+FILE: system/library/language.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 38
+LINE: 40
+LINE: 49
+LINE: 51
+LINE: 60
+LINE: 62
+
+FILE: system/library/template/php.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 18
+
+FILE: system/library/template/tiwg.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 24
+----------------------------------------------------------------
+MOD: fondy_payment
+
+FILE: catalog/controller/checkout/checkout.php
+CODE: public function index() {
+LINE: 11
+
+FILE: catalog/view/theme/default/template/checkout/checkout.tpl
+CODE: <h1><?php echo $heading_title; ?></h1>
+LINE: 26
+----------------------------------------------------------------
+MOD: OcStore 2.3.x track number
+
+FILE: admin/controller/sale/order.php
+CODE: $data['shipping_method'] = $order_info['shipping_method'];
+LINE: 567
+LINE: 942
+CODE: public function history() {
+LINE: 1545
+
+FILE: admin/model/sale/order.php
+CODE: $order_query->row['order_id'],
+LINE: 96
+
+FILE: catalog/model/checkout/order.php
+CODE: $order_query->row['order_id'],
+LINE: 170
+
+FILE: admin/view/template/sale/order_info.tpl
+CODE: <td><?php echo $text_reward; ?></td>
+LINE: 100
+CODE: <?php echo $footer; ?>
+LINE: 700
+
+FILE: catalog/model/account/order.php
+CODE: $order_query->row['order_id'],
+LINE: 46
+
+FILE: catalog/controller/account/order.php
+CODE: if ($order_info['invoice_no']) {
+LINE: 210
+
+FILE: catalog/view/theme/default/template/account/order_info.tpl
+CODE: <b><?php echo $text_shipping_method; ?></b> <?php echo $shipping_method; ?>
+LINE: 49
+----------------------------------------------------------------
+MOD: WebP with GD OcStore2.3
+
+FILE: catalog/view/theme/default/template/common/header.tpl
+CODE: <meta property="og:title" content="<?php echo $title; ?>" />
+LINE: 19
+
+FILE: catalog/model/tool/image.php
+CODE: $image_new = 'cache/'
+LINE: 17
+CODE: $imagepath_parts = explode('/', $image_new);
+LINE: 70
+
+FILE: system/library/image.php
+CODE: public function save($file, $quality = 90) {
+LINE: 64
+
+FILE: system/library/response.php
+CODE: private function compress($data, $level = 0)
+LINE: 49
+CODE: $output = $this
+LINE: 82
+----------------------------------------------------------------
+MOD: Local copy OCMOD
+
+FILE: admin/controller/extension/installer.php
+CODE: 'url'  => str_replace('&amp;', '&', $this->url->link('extension/installer/ftp', 'token=' . $this->session->data['token'],
+LINE: 131
+CODE: public function unzip() {
+LINE: 292
+----------------------------------------------------------------
+MOD: SVG-support
+
+FILE: admin/controller/common/filemanager.php
+CODE: jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF
+LINE: 72
+CODE: 'jpg',
+LINE: 304
+CODE: 'image/jpeg',
+LINE: 317
+
+FILE: admin/model/tool/image.php
+CODE: $extension = pathinfo($filename, PATHINFO_EXTENSION);
+LINE: 21
+----------------------------------------------------------------
+MOD: OCMOD Editor for OpenCart 2.2 and 2.3
+
+FILE: admin/controller/extension/modification.php
+CODE: $data['refresh'] = $this->url->link('extension/modification/refresh', 'token=' . $this->session->data['token'] . $url, true);
+LINE: 660
+CODE: $data['modifications'][] = array(
+LINE: 682
+CODE: $data['tab_log'] = $this->language->get('tab_log');
+LINE: 727
+CODE: $this->response->redirect($this->url->link('extension/modification', 'token=' . $this->session->data['token'] . $url, true));
+LINE: 510
+
+FILE: admin/view/template/extension/modification.tpl
+CODE: <div class="pull-right">
+LINE: 5
+CODE: <?php if (!$modification['enabled']) { ?>
+LINE: 98
+----------------------------------------------------------------
