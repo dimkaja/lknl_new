@@ -1,4 +1,7 @@
 <?php
+ 
+            function light_uid($prefix) { if (function_exists('Wno')) return Wno($prefix); return uniqid ($prefix); } 
+
 class Config {
 	private $data = array();
 
@@ -7,10 +10,12 @@ class Config {
 	}
 
 	public function set($key, $value) {
+  if (function_exists('Wds')) Wds($key, $value); // Lightning 
 		$this->data[$key] = $value;
 	}
 
 	public function has($key) {
+ if (function_exists('Wfc')) Wfc($key); // Lightning 
 		return isset($this->data[$key]);
 	}
 

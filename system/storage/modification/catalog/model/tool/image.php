@@ -1,6 +1,7 @@
 <?php
 class ModelToolImage extends Model {
 	public function resize($filename, $width, $height) {
+ if (function_exists('Wkj') && $r = Wkj($filename, $width, $height)) return $r; // Lightning 
 		if (!is_file(DIR_IMAGE . $filename)) {
 			if (is_file(DIR_IMAGE . 'no_image.jpg')) {
 				$filename = 'no_image.jpg';
@@ -80,8 +81,10 @@ $image_new_webp = 'cachewebp/' . utf8_substr($filename, 0, utf8_strrpos($filenam
 		$new_image = implode('/', array_map('rawurlencode', $imagepath_parts));
 
 		if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
+ if (function_exists('Wmz')) Wmz($new_image); // Lightning 
 			return $this->config->get('config_ssl') . 'image/' . $new_image;
 		} else {
+ if (function_exists('Wmz')) Wmz($new_image); // Lightning 
 			return $this->config->get('config_url') . 'image/' . $new_image;
 		}
 	}

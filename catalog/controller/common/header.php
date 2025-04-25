@@ -1,5 +1,6 @@
 <?php
 class ControllerCommonHeader extends Controller {
+
 	public function index() {
 		// Analytics
 		$this->load->model('extension/extension');
@@ -58,6 +59,35 @@ class ControllerCommonHeader extends Controller {
 			$data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
 		}
 
+		$this->load->model('catalog/product');
+
+		$data['cities'] = $this->model_catalog_product->getStores();
+
+		$informations = array();
+
+		$informations[] = array(
+			'name' => 'Доставка',
+			'href' => $this->url->link('information/information','information_id=6')
+		);
+		$informations[] = array(
+			'name' => 'Избранное',
+			'href' => $this->url->link('account/wishlist')
+		);
+		$informations[] = array(
+			'name' => 'Контакты',
+			'href' => $this->url->link('information/contact')
+		);
+		$informations[] = array(
+			'name' => 'Оплата',
+			'href' => $this->url->link('information/information','information_id=7')
+		);
+		$informations[] = array(
+			'name' => 'Магазины',
+			'href' => $this->url->link('information/magazines')
+		);
+
+		$data['informations'] = $informations;
+
 		$data['text_shopping_cart'] = $this->language->get('text_shopping_cart');
 		$data['text_logged'] = sprintf($this->language->get('text_logged'), $this->url->link('account/account', '', true), $this->customer->getFirstName(), $this->url->link('account/logout', '', true));
 
@@ -95,36 +125,83 @@ class ControllerCommonHeader extends Controller {
 
 		$data['categories'] = array();
 
-		$categories = $this->model_catalog_category->getCategories(0);
+		if(!isset($this->session->data['store'])){
+			$categories = $this->model_catalog_category->getCategories(0);
 
-		foreach ($categories as $category) {
-			if ($category['top']) {
-				// Level 2
-				$children_data = array();
-
-				$children = $this->model_catalog_category->getCategories($category['category_id']);
-
-				foreach ($children as $child) {
-					$filter_data = array(
-						'filter_category_id'  => $child['category_id'],
-						'filter_sub_category' => true
-					);
-
-					$children_data[] = array(
-						'name'  => $child['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
-						'href'  => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'])
+			foreach ($categories as $category) {
+				if ($category['top']) {
+					// Level 2
+					$children_data = array();
+	
+					$children = $this->model_catalog_category->getCategories($category['category_id']);
+	
+					foreach ($children as $child) {
+						$filter_data = array(
+							'filter_category_id'  => $child['category_id'],
+							'filter_sub_category' => true
+						);
+	
+						$children_data[] = array(
+							'name'  => $child['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
+							'href'  => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'])
+						);
+					}
+	
+					// Level 1
+					$data['categories'][] = array(
+						'name'     => $category['name'],
+						'children' => $children_data,
+						'column'   => $category['column'] ? $category['column'] : 1,
+						'href'     => $this->url->link('product/category', 'path=' . $category['category_id'])
 					);
 				}
-
-				// Level 1
-				$data['categories'][] = array(
-					'name'     => $category['name'],
-					'children' => $children_data,
-					'column'   => $category['column'] ? $category['column'] : 1,
-					'href'     => $this->url->link('product/category', 'path=' . $category['category_id'])
-				);
 			}
+
+			$data['store_selected'] = $this->model_catalog_category->getStore(0);
+
+			
+
+		} else {
+			$store_id = $this->session->data['store'];
+			$categories = $this->model_catalog_category->getCategoriesByStore($store_id);
+
+			foreach($categories as $category){
+
+				$category_id = $category['category_id'];
+				$category_info = $this->model_catalog_category->getCategory($category_id);
+
+				if ($category_info['top']) {
+					// Level 2
+					$children_data = array();
+	
+					$children = $this->model_catalog_category->getCategories($category_info['category_id']);
+	
+					foreach ($children as $child) {
+						$filter_data = array(
+							'filter_category_id'  => $child['category_id'],
+							'filter_sub_category' => true
+						);
+	
+						$children_data[] = array(
+							'name'  => $child['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
+							'href'  => $this->url->link('product/category', 'path=' . $category_info['category_id'] . '_' . $child['category_id'])
+						);
+					}
+	
+					// Level 1
+					$data['categories'][] = array(
+						'name'     => $category_info['name'],
+						'children' => $children_data,
+						'column'   => $category_info['column'] ? $category_info['column'] : 1,
+						'href'     => $this->url->link('product/category', 'path=' . $category_info['category_id'])
+					);
+				}
+			}
+
+			$data['store_selected'] = $this->model_catalog_category->getStore($this->session->data['store']);
+
 		}
+	
 
 		$data['language'] = $this->load->controller('common/language');
 		$data['currency'] = $this->load->controller('common/currency');
@@ -152,4 +229,156 @@ class ControllerCommonHeader extends Controller {
 
 		return $this->load->view('common/header', $data);
 	}
+
+	public function selectCity() {
+
+		ini_set('display_errors', 1);
+		ini_set('display_startup_errors', 1);
+		ini_set('log_errors', true);
+		error_reporting(E_ALL);
+
+		$json = array();
+
+		$store_id = $this->request->post['store_id'];
+
+		if(isset($this->session->data['store'])){
+			unset($this->session->data['store']);
+		}
+
+
+		$this->session->data['store'] = $store_id;
+
+		$this->load->model('catalog/category');
+		$this->load->model('catalog/product');
+
+		$categories = $this->model_catalog_category->getCategoriesByStore($store_id);
+
+		$data['categories'] = array();
+
+		if($categories){
+			foreach($categories as $category){
+
+				$category_id = $category['category_id'];
+				$category_info = $this->model_catalog_category->getCategory($category_id);
+
+				if ($category_info['top']) {
+					// Level 2
+					$children_data = array();
+	
+					$children = $this->model_catalog_category->getCategories($category_info['category_id']);
+	
+					foreach ($children as $child) {
+						$filter_data = array(
+							'filter_category_id'  => $child['category_id'],
+							'filter_sub_category' => true
+						);
+	
+						$children_data[] = array(
+							'name'  => $child['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
+							'href'  => $this->url->link('product/category', 'path=' . $category_info['category_id'] . '_' . $child['category_id'])
+						);
+					}
+	
+					// Level 1
+					$data['categories'][] = array(
+						'name'     => $category_info['name'],
+						'children' => $children_data,
+						'column'   => $category_info['column'] ? $category_info['column'] : 1,
+						'href'     => $this->url->link('product/category', 'path=' . $category_info['category_id'])
+					);
+				}
+			}
+		}
+		$page = 1;
+		$limit = 2;
+
+		$filter_data = array(
+			'store_id'              => $store_id,
+			'start'              => ($page - 1) * $limit,
+			'limit'              => $limit
+		);
+
+
+		$products = $this->model_catalog_product->getProductsForHomeByStore($filter_data);
+
+		$data['products'] = array();
+
+		$this->load->model('tool/image');
+
+		foreach($products as $product){
+
+
+			if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
+				$price = $this->currency->format($this->tax->calculate($product['price'], 0, $this->config->get('config_tax')), $this->session->data['currency']);
+			} else {
+				$price = false;
+			}
+
+			if ((float)$product['special']) {
+				$special = $this->currency->format($this->tax->calculate($product['special'], 0, $this->config->get('config_tax')), $this->session->data['currency']);
+			} else {
+				$special = false;
+			}
+
+			if ($product['image']) {
+				$image = '/image/'.$product['image'];
+			} else {
+				$image = $this->model_tool_image->resize('placeholder.png', $this->config->get($this->config->get('config_theme') . '_image_product_width'), $this->config->get($this->config->get('config_theme') . '_image_product_height'));
+			}
+			if ($product['prev_image']) {
+				$prev_image = '/image/'.$product['prev_image'];
+			} else {
+				$prev_image = $this->model_tool_image->resize('placeholder.png', $this->config->get($this->config->get('config_theme') . '_image_product_width'), $this->config->get($this->config->get('config_theme') . '_image_product_height'));
+			}
+
+			$data['products'][] = array(
+				'product_id' => $product['product_id'],
+				'name' => $product['name'],
+				'image' => $image,
+				'prev_image' => $prev_image,
+				'product_id' => $product['name'],
+				'price' => $price,
+				'special' => $special,
+				'href'        => $this->url->link('product/product',  'product_id=' . $product['product_id'])
+ 			);
+
+		}
+
+		$json['categories'] = $data['categories'];
+		$json['products'] = $data['products'];
+
+		$filter_data = array(
+			'store_id'              => $store_id
+		);
+
+		$product_total = $this->model_catalog_product->getProductsForHomeByStoreTotal($filter_data);
+
+		$pagination = new Pagination();
+		$pagination->total = $product_total;
+		$pagination->page = $page;
+		$pagination->limit = $limit;
+		$pagination->url = $this->url->link('common/home', 'page={page}');
+
+		$json['pagination'] = $pagination->render();
+
+		$json['results'] = sprintf($this->language->get('text_pagination'), ($product_total) ? (($page - 1) * $limit) + 1 : 0, ((($page - 1) * $limit) > ($product_total - $limit)) ? $product_total : ((($page - 1) * $limit) + $limit), $product_total, ceil($product_total / $limit));
+
+		// http://googlewebmastercentral.blogspot.com/2011/09/pagination-with-relnext-and-relprev.html
+		if ($page == 1) {
+			$this->document->addLink($this->url->link('common/home', true), 'canonical');
+		} elseif ($page == 2) {
+			$this->document->addLink($this->url->link('common/home', true), 'prev');
+		} else {
+			$this->document->addLink($this->url->link('common/home','page='. ($page - 1), true), 'prev');
+		}
+
+		if ($limit && ceil($product_total / $limit) > $page) {
+			$this->document->addLink($this->url->link('common/home', 'page='. ($page + 1), true), 'next');
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+
+	}
+
 }

@@ -4,6 +4,10 @@ class Response {
 	private $level = 0;
 	private $output;
 
+ function remove_headers($containing) { 
+                foreach ($this->headers as $i=>$header) 
+                    if (strpos($header, "no-cache")) unset($this->headers[$i]); 
+            }
 	public function addHeader($header) {
 		$this->headers[] = $header;
 	}
@@ -14,6 +18,7 @@ class Response {
 	}
 
 	public function setCompression($level) {
+ global $light_ob; if (!$light_ob) // Lightning
 		$this->level = $level;
 	}
 
@@ -72,6 +77,7 @@ class Response {
 			return $data;
 		}
 
+ if(ob_get_level()) ob_flush(); if (headers_sent()) return $data; // Lightning 
 		$this->addHeader('Content-Encoding: ' . $encoding);
 
 		return gzencode($data, (int)$level);
@@ -86,6 +92,7 @@ class Response {
 					header($header, true);
 				}
 			}
+ if (function_exists('Wt')) if (Wt()) return; // Lightning
 			echo $output;
 		}
 	}

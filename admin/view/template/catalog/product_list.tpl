@@ -288,4 +288,10 @@ $('input[name=\'filter_model\']').autocomplete({
 	}
 });
 //--></script></div>
+
+<style>
+  .img-thumbnail {
+    max-width: 100px;
+  }
+</style>
 <?php echo $footer; ?>

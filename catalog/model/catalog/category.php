@@ -12,6 +12,18 @@ class ModelCatalogCategory extends Model {
 		return $query->rows;
 	}
 
+	public function getCategoriesByStore($store_id) {
+
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category_to_store c2s WHERE c2s.store_id = '".(int)$store_id."'");
+
+		return $query->rows;
+
+	}
+	public function getStore($store_id) {
+		$query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
+
+		return $query->row;
+	}
 	public function getCategoryFilters($category_id) {
 		$implode = array();
 

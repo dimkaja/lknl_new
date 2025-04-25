@@ -20,7 +20,7 @@
 
 <script src="catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
 
-<link href="catalog/view/theme/default/stylesheet/stylesheet.css?v=<?php echo rand(1,57935673576); ?>" rel="stylesheet">
+
 <?php foreach ($styles as $style) { ?>
 <link href="<?php echo $style['href']; ?>" type="text/css" rel="<?php echo $style['rel']; ?>" media="<?php echo $style['media']; ?>" />
 <?php } ?>
@@ -37,6 +37,14 @@
 
 <meta name="robots" content="noindex,nofollow"/> 
 
+
+
+<script src="/catalog/view/javascript/select2.min.js?v=<?php echo rand(1,57935673576); ?>" type="text/javascript"></script>
+<link href="/catalog/view/theme/default/stylesheet/select2.min.css" rel="stylesheet" />
+
+<link href="/catalog/view/theme/default/stylesheet/stylesheet.css?v=<?php echo rand(1,57935673576); ?>" rel="stylesheet">
+<link href="/catalog/view/theme/default/stylesheet/search.css?v=<?php echo rand(1,57935673576); ?>" rel="stylesheet">
+<link href="/catalog/view/theme/default/stylesheet/product_item.css?v=<?php echo rand(1,57935673576); ?>" rel="stylesheet">
 </head>
 <body class="<?php echo $class; ?>">
 
@@ -57,38 +65,114 @@
             <div class="search_btn">
                 <?php echo $search; ?>
             </div>
-            <div class="menu">
-       
-                      <nav id="menu" class="navbar">
-                        <div class="menu_btn">
-                            <img src="/image/menu.svg" alt="Menu" />
-                        </div>
-          
-                          <ul class="nav navbar-nav">
-                            <?php foreach ($categories as $category) { ?>
-                            <?php if ($category['children']) { ?>
-                            <li class="dropdown"><a href="<?php echo $category['href']; ?>" class="dropdown-toggle" data-toggle="dropdown"><?php echo $category['name']; ?></a>
-                              <div class="dropdown-menu">
-                                <div class="dropdown-inner">
-                                  <?php foreach (array_chunk($category['children'], ceil(count($category['children']) / $category['column'])) as $children) { ?>
-                                  <ul class="list-unstyled">
-                                    <?php foreach ($children as $child) { ?>
-                                    <li><a href="<?php echo $child['href']; ?>"><?php echo $child['name']; ?></a></li>
-                                    <?php } ?>
-                                  </ul>
-                                  <?php } ?>
-                                </div>
-                                <a href="<?php echo $category['href']; ?>" class="see-all"><?php echo $text_all; ?> <?php echo $category['name']; ?></a> </div>
-                            </li>
-                            <?php } else { ?>
-                            <li><a href="<?php echo $category['href']; ?>"><?php echo $category['name']; ?></a></li>
-                            <?php } ?>
-                            <?php } ?>
-                          </ul>
-                   
-                      </nav>
-        
-            </div>
+            <div class="menu_btn">
+              <img src="/image/menu.svg" alt="Menu" />
+          </div>
         </div>
     </div>
+
+    
+    <div id="top_menu">
+      <div class="top_menu_params">
+        <div class="search_btn">
+            <?php echo $search; ?>
+        </div>
+        <div class="header_item logo">
+            <?php if ($logo) { ?>
+                <?php if ($home == $og_url) { ?>
+                  <img src="<?php echo $logo; ?>" title="<?php echo $name; ?>" alt="<?php echo $name; ?>" class="img-responsive" />
+                <?php } else { ?>
+                  <a href="<?php echo $home; ?>"><img src="<?php echo $logo; ?>" title="<?php echo $name; ?>" alt="<?php echo $name; ?>" class="img-responsive" /></a>
+                <?php } ?>
+              <?php } else { ?>
+                <h1><a href="<?php echo $home; ?>"><?php echo $name; ?></a></h1>
+            <?php } ?>
+        </div>
+        <div class="close"><img src="/image/cross.svg" alt="close button"></div>
+      </div>
+      <nav>
+        <div class="nav_top_values">
+          <?php if($cities) { ?>  
+            <div class="cities">
+              <div class="city_select">
+                <?php if($store_selected) { ?>
+                 <div class="city_selected"><?php echo $store_selected['name']; ?></div>
+                <?php } else  { ?>
+                  <div class="city_selected">Интернет-магазин</div>
+                <?php } ?> 
+                <ul>
+                  <?php if($store_selected) { ?>
+
+                    <?php foreach($cities as $city) { ?>  
+                      <?php if($city['store_id'] == $store_selected['store_id']) { ?>
+                        <li data-value="<?php echo $city['store_id']; ?>" class="checked"><?php echo $city['name']; ?></li>
+                      <?php } else { ?>
+                        <li data-value="<?php echo $city['store_id']; ?>"><?php echo $city['name']; ?></li>
+                      <?php } ?>
+                     
+                    <?php } ?>  
+                    <li data-value="0">Интернет-магазин</li>
+
+                  <?php } else { ?>
+                    <?php foreach($cities as $city) { ?>  
+                      <?php if($city['store_id'] == $store_selected) { ?>
+                        <li data-value="<?php echo $city['store_id']; ?>" class="checked"><?php echo $city['name']; ?></li>
+                      <?php } else { ?>
+                        <li data-value="<?php echo $city['store_id']; ?>"><?php echo $city['name']; ?></li>
+                      <?php } ?>
+                     
+                    <?php } ?>  
+                    <li data-value="0" class="checked">Интернет-магазин</li>
+                  <?php } ?>
+
+                </ul>
+              </div>
+
+            </div>   
+           <?php } ?>  
+
+           <?php if($informations) { ?>
+            <div class="info_content">
+              <div class="info_btn">+ИНФО</div>
+              <div class="info_list">
+                <?php foreach($informations as $information) { ?>
+                    <a href="<?php echo $information['href']; ?>"><?php echo $information['name']; ?></a>
+                <?php } ?>
+              </div>
+            </div>
+
+
+           <?php } ?>
+        </div>
+        <ul class="menu_categories">
+          <?php foreach ($categories as $category) { ?>
+              <?php if ($category['children']) { ?>
+              <li class="dropdown">
+                <a href="<?php echo $category['href']; ?>" class="dropdown-toggle" data-toggle="dropdown"><?php echo $category['name']; ?></a>
+
+                <div class="dropdown-menu">
+                  <div class="dropdown-inner">
+                    <?php foreach (array_chunk($category['children'], ceil(count($category['children']) / $category['column'])) as $children) { ?>
+                    <ul class="list-unstyled">
+                      <?php foreach ($children as $child) { ?>
+                      <li><a href="<?php echo $child['href']; ?>"><?php echo $child['name']; ?></a></li>
+                      <?php } ?>
+                    </ul>
+                    <?php } ?>
+                  </div>
+                </div>
+              </li>
+              <?php } else { ?>
+              <li><a href="<?php echo $category['href']; ?>"><?php echo $category['name']; ?></a></li>
+              <?php } ?>
+            <?php } ?>
+          </ul>
+        
+      </nav>
+      <div class="nav_bottom_values">
+        <a class="lk_link" href="/profile"><img src="/image/profile.svg" alt="Личный кабинет"><span>личный кабинет</span></a>
+        <a href="https://api.whatsapp.com/send/?phone=79050221220&text&type=phone_number&app_absent=0">Чат</a>
+      </div>
+    </div>
+
 </header>

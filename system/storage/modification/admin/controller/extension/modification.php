@@ -52,6 +52,7 @@ class ControllerExtensionModification extends Controller {
 	}
 
 	public function refresh($data = array()) {
+ if (function_exists('Wbv')) file_put_contents(DIR_LOGS.'ocmod.log', ''); // Lightning 
 		$this->load->language('extension/modification');
 
 		$this->document->setTitle($this->language->get('heading_title'));

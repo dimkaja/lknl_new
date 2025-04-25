@@ -23,6 +23,160 @@ function getURLVar(key) {
 }
 
 $(document).ready(function() {
+
+	$('ul.menu_categories li.dropdown').click(function(e){
+		$(this).toggleClass('open');
+		e.preventDefault();
+
+		$(this).find('.dropdown-menu').slideToggle();
+
+	});
+
+	$('div#search input[type="text"]').keyup(function(){
+		$('.search_content button').remove();
+		$('.search_content').html('<button class="btn btn-default btn-lg" type="button">'+$(this).val()+'</button>');
+	});
+
+	$('div#search .search_box .close').click(function(){
+		$(this).parent().find('input[type="text"]').val('');
+		$('.search_content button').html('');
+	});
+
+	$('.search_button').click(function(){
+		$('header #search').toggleClass('open');
+		$('header #search').fadeIn();
+	});
+	$('button.back_btn').click(function(){
+		$('header #search').toggleClass('open');
+		$('header #search').fadeOut();
+	});
+
+	$('.city_select').click(function(e){
+
+			$(this).find('ul').slideToggle(300);
+
+	});
+	$('.info_btn').click(function(e){
+			$(this).toggleClass('open');
+			$(this).parent().find('.info_list').slideToggle(300);
+
+			if($(this).hasClass('open')){
+				$(this).html('-ИНФО');
+			} else {
+				$(this).html('+ИНФО');
+			}
+
+	});
+
+
+
+	$('#top_menu .city_select ul li').click(function(){
+		$('#top_menu .city_select ul li').removeClass('checked');
+
+
+		$(this).toggleClass('checked');
+
+		var curVal = $('#top_menu .city_select ul li.checked').text().trim();
+		var store_id = $('#top_menu .city_select ul li.checked').attr('data-value');
+
+		$('.city_selected').html(curVal);
+
+		$.ajax({
+			url: 'index.php?route=common/header/selectCity',
+			type: 'post',
+			data: 'store_id=' + store_id,
+			dataType: 'json',
+			beforeSend: function() {
+				
+			},
+			complete: function(data) {
+				console.log(data);
+			},
+			success: function(json) {
+				if(json['categories']){
+					
+					var categories = '';
+
+					for(key in json['categories']) {
+
+						var category_name = json['categories'][key].name;
+						var category_href = json['categories'][key].href;
+
+						categories += '<li><a href="'+category_href+'">'+category_name+'</a></li>';
+
+					}
+					$('.menu_categories').html(categories);
+				}
+				if(json['products']){
+					
+					var products = '';
+
+					for(key in json['products']) {
+
+						var product_product_id = json['products'][key].product_id;
+						var product_name = json['products'][key].name;
+						var product_href = json['products'][key].href;
+						var product_image = json['products'][key].image;
+						var product_prev_image = json['products'][key].prev_image;
+						var product_price = json['products'][key].price;
+						var product_special = json['products'][key].special;
+
+						if(product_special) {
+							product_price = product_special;
+						}
+
+						products += '<div class="product_item">';
+						products += '<div class="product_images">'
+						products += '<a href="'+product_href+'">';
+						products += '<img src="'+product_image+'" alt="'+product_name+'">';
+						products += '</a>';
+						products += '<a href="'+product_href+'">';
+						products += '<img src="'+product_prev_image+'" alt="'+product_name+'">';
+						products += '</a>';
+						products += '</div>';
+						products += '<div class="product_bottom_params">';
+						products += '<div class="product_prices">';
+						products += '<div class="product_name">'+product_name+'</div>';
+						products += '<div class="price">'+product_price+'</div>';
+						products += '</div>';
+						products += '<div class="wishlist_content">';
+						products += '<a onclick="wishlist.add(\''+product_name+'\');return false;" href="#">';
+						products += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">';
+						products += '<g clip-path="url(#clip0_33263_25458)"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.73889 1.23062C3.63983 1.23062 3.30411 1.23062 3.30411 1.23062C3.30411 1.23062 3.30411 1.57594 3.30411 1.71979V13.4074L7.99955 9.846L12.6956 13.4076V1.71996C12.6956 1.57612 12.6956 1.2308 12.6956 1.2308C12.6956 1.2308 12.3599 1.2308 12.2608 1.2308L3.73889 1.23062ZM2 0C2 0 3.2614 -0.000176013 3.73889 -0.000176013L12.2608 0C12.7383 0 14 0.000612825 14 0.000612825C14 0.000612825 14 1.27791 14 1.71996V16L7.99998 11.4609L2.00052 15.9998L1.99976 1.71979C1.99976 1.27774 2 0 2 0Z" fill="#676560"></path>';
+						products += '</g><defs><clipPath id="clip0_33263_25458"><rect width="16" height="16" fill="white"></rect></clipPath></defs>';
+						products += '</svg>';
+						products += '</a>';
+						products += '</div>';
+						products += '</div>';
+						products += '</div>';
+
+					}
+					$('.menu_categories').html(categories);
+					$('#home_products').html(products);
+					
+					_nextPageUrl = getNextPageUrlFromPagination($('ul.pagination'));
+					//console.log(_nextPageUrl);
+				
+					HidePagination();
+				
+					if (_nextPageUrl) {
+						$(window).off('scroll', ScrollHandler).on('scroll', ScrollHandler);
+					}
+
+					$('.home_pagination').html('<div class="col-sm-6 text-left">'+json['pagination']+'</div><div class="col-sm-6 text-right">'+json['results']+'</div>');
+				}
+			}
+		});
+
+	});
+
+	$('.header_box .menu_btn').click(function(){
+		$('#top_menu').toggleClass('open');
+	});
+	$('div#top_menu .top_menu_params .close').click(function(){
+		$('#top_menu').toggleClass('open');
+	});
+
 	// Highlight any found errors
 	$('.text-danger').each(function() {
 		var element = $(this).parent().parent();
@@ -52,6 +206,19 @@ $(document).ready(function() {
 
 	/* Search */
 	$('#search input[name=\'search\']').parent().find('button').on('click', function() {
+		var url = $('base').attr('href') + 'index.php?route=product/search';
+
+		var value = $('header #search input[name=\'search\']').val();
+
+		if (value) {
+			url += '&search=' + encodeURIComponent(value);
+		}
+
+		location = url;
+	});
+	/* Search */
+	$('div#search .search_content').on('click','button',function() {
+		console.log('clicked');
 		var url = $('base').attr('href') + 'index.php?route=product/search';
 
 		var value = $('header #search input[name=\'search\']').val();

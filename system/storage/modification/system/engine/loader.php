@@ -3,10 +3,13 @@ final class Loader {
 	protected $registry;
 
 	public function __construct($registry) {
+ if (empty($GLOBALS["registry"])) $GLOBALS["registry"] = $registry; // Lightning 
 		$this->registry = $registry;
 	}
 	
 	public function controller($route, $data = array()) {
+ $li_aj = 1; if (!isset($data) && isset($args)) $data = $args; // Lightning
+ if (function_exists('Wkh') and !empty($route) and Wkh($route)) return false; // Lightning 
 		// Sanitize the call
 		$route = preg_replace('/[^a-zA-Z0-9_\/]/', '', (string)$route);
 		
@@ -31,6 +34,8 @@ final class Loader {
 			return false;
 		}
 
+ if (isset($li_view) && function_exists('Wbo')) { if (empty($route)) $route = $template; Wbo($route, $output);}  // Lightning 
+ if (isset($li_aj) && function_exists('Wlk')) Wlk($route, $data, $output); // Lightning 
 		return $output;
 	}
 	
@@ -65,6 +70,7 @@ final class Loader {
 	}
 
 	public function view($route, $data = array()) {
+ $li_view = 1; // Lightning
 		$output = null;
 		
 		// Sanitize the call
@@ -80,7 +86,7 @@ final class Loader {
 		if (!$output) {
 			$template = new Template($this->registry->get('config')->get('template_type'));
 			
-			foreach ($data as $key => $value) {
+			 /* Lightning */ if (!function_exists('Wkm') || !Wkm($template, $data)) foreach ($data as $key => $value) { 
 				$template->set($key, $value);
 			}
 		
@@ -94,6 +100,8 @@ final class Loader {
 			return $result;
 		}
 		
+ if (isset($li_view) && function_exists('Wbo')) { if (empty($route)) $route = $template; Wbo($route, $output);}  // Lightning 
+ if (isset($li_aj) && function_exists('Wlk')) Wlk($route, $data, $output); // Lightning 
 		return $output;
 	}
 
@@ -140,6 +148,8 @@ final class Loader {
 		
 		$this->registry->get('event')->trigger('language/' . $route . '/after', array(&$route, &$output));
 		
+ if (isset($li_view) && function_exists('Wbo')) { if (empty($route)) $route = $template; Wbo($route, $output);}  // Lightning 
+ if (isset($li_aj) && function_exists('Wlk')) Wlk($route, $data, $output); // Lightning 
 		return $output;
 	}
 	
@@ -176,6 +186,7 @@ final class Loader {
 
 			if (is_callable($callable)) {
 				$output = call_user_func_array($callable, $args);
+ if (function_exists('Wfn')) Wfn($route, $args, $output); // Lightning 
 			} else {
 				throw new \Exception('Error: Could not call model/' . $route . '!');
 			}
@@ -187,6 +198,8 @@ final class Loader {
 				return $result;
 			}
 						
+ if (isset($li_view) && function_exists('Wbo')) { if (empty($route)) $route = $template; Wbo($route, $output);}  // Lightning 
+ if (isset($li_aj) && function_exists('Wlk')) Wlk($route, $data, $output); // Lightning 
 			return $output;
 		};
 	}	

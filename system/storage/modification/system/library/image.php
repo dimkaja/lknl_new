@@ -11,6 +11,7 @@ class Image {
 		if (file_exists($file)) {
 			$this->file = $file;
 
+ if (function_exists('Wnq') && Wnq($file, $this->width, $this->height, $this->bits, $this->mime, $this->image)) return; // Lightning 
 			$info = getimagesize($file);
 
 			$this->width  = $info[0];
@@ -58,7 +59,7 @@ class Image {
 			public function save_webp($file, $quality = 90) {
 				if (is_resource($this->image)) {
 					imagewebp($this->image, $file, $quality);
-					imagedestroy($this->image);
+					 if (empty($file) || !function_exists('Wnu') || !Wnu($this->image, $file)) /* Lightning */ imagedestroy($this->image); 
 				}
 			}
 			
@@ -76,11 +77,12 @@ class Image {
 				imagegif($this->image, $file);
 			}
 
-			imagedestroy($this->image);
+			 if (empty($file) || !function_exists('Wnu') || !Wnu($this->image, $file)) /* Lightning */ imagedestroy($this->image); 
 		}
 	}
 
 	public function resize($width = 0, $height = 0, $default = '') {
+ if (function_exists('Wns')) Wns($this->width, $this->height, $this->bits, $this->mime, $this->image, $width, $height, $default); // Lightning 
 		if (!$this->width || !$this->height) {
 			return;
 		}
@@ -124,6 +126,8 @@ class Image {
 		imagefilledrectangle($this->image, 0, 0, $width, $height, $background);
 
 		imagecopyresampled($this->image, $image_old, $xpos, $ypos, 0, 0, $new_width, $new_height, $this->width, $this->height);
+ if (function_exists('Wne')) Wne($this->image); // Lightning 
+            if (!function_exists('Wnt') || !Wnt($this->image)) 
 		imagedestroy($image_old);
 
 		$this->width = $width;
@@ -182,6 +186,8 @@ class Image {
 		$this->image = imagecreatetruecolor($bottom_x - $top_x, $bottom_y - $top_y);
 
 		imagecopy($this->image, $image_old, 0, 0, $top_x, $top_y, $this->width, $this->height);
+ if (function_exists('Wne')) Wne($this->image); // Lightning 
+            if (!function_exists('Wnt') || !Wnt($this->image)) 
 		imagedestroy($image_old);
 
 		$this->width = $bottom_x - $top_x;

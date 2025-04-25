@@ -1456,4 +1456,11 @@ $('.datetime').datetimepicker({
 $('#language a:first').tab('show');
 $('#option a:first').tab('show');
 //--></script></div>
+
+<style>
+  div#tab-image img {
+      max-width: 100px;
+    }
+  </style>
+  
 <?php echo $footer; ?>

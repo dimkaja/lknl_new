@@ -1,7 +1,7 @@
 <?php
 namespace Template;
 final class PHP {
-	private $data = array();
+	 public $data  = array();
 	
 	public function set($key, $value) {
 		$this->data[$key] = $value;
