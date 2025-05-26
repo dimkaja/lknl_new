@@ -3,6 +3,10 @@ class ControllerAccountLogin extends Controller {
 	private $error = array();
 
 	public function index() {
+
+		$this->response->redirect($this->url->link('checkout/auth', '', true));
+
+
 		$this->load->model('account/customer');
 
 		// Login override for admin users

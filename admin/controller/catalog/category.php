@@ -407,6 +407,13 @@ class ControllerCatalogCategory extends Controller {
 			$category_info = $this->model_catalog_category->getCategory($this->request->get['category_id']);
 		}
 
+		if(isset($category_info)){
+			$data['text_all'] = $category_info['text_all'];
+		} else {
+			$data['text_all'] = '';
+		}
+
+		
 		$data['token'] = $this->session->data['token'];
 		$data['ckeditor'] = $this->config->get('config_editor_default');
 
@@ -491,6 +498,11 @@ class ControllerCatalogCategory extends Controller {
 		} else {
 			$data['image'] = '';
 		}
+		if(isset($category_info)){
+			$data['text_all'] = $category_info['text_all'];
+		} else {
+			$data['text_all'] = '';
+		}
 
 		$this->load->model('tool/image');
 
@@ -511,6 +523,8 @@ class ControllerCatalogCategory extends Controller {
 		} else {
 			$data['top'] = 0;
 		}
+
+
 
 		if (isset($this->request->post['column'])) {
 			$data['column'] = $this->request->post['column'];

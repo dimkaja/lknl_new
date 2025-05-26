@@ -128,6 +128,7 @@ class ControllerAccountWishList extends Controller {
 		$this->response->setOutput($this->load->view('account/wishlist', $data));
 	}
 
+
 	public function add() {
 		$this->load->language('account/wishlist');
 
@@ -146,6 +147,7 @@ class ControllerAccountWishList extends Controller {
 		if ($product_info) {
 			if ($this->customer->isLogged()) {
 				// Edit customers cart
+				
 				$this->load->model('account/wishlist');
 
 				$this->model_account_wishlist->addWishlist($this->request->post['product_id']);
@@ -164,9 +166,81 @@ class ControllerAccountWishList extends Controller {
 
 				$json['success'] = sprintf($this->language->get('text_login'), $this->url->link('account/login', '', true), $this->url->link('account/register', '', true), $this->url->link('product/product', 'product_id=' . (int)$this->request->post['product_id']), $product_info['name'], $this->url->link('account/wishlist'));
 
-				$json['total'] = sprintf($this->language->get('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
+				// $json['total'] = sprintf($this->language->get('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
+
+				$json['total'] = count($this->session->data['wishlist']);
+
 			}
+			
+			$this->load->model('catalog/product');
+
+			$product_info = $this->model_catalog_product->getProduct($this->request->post['product_id']);
+			$json['product_name'] = $product_info['name'];
+
+
+			
+			if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
+				$product_info['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+			} else {
+				$product_info['price'] = false;
+			}
+
+			if ((float)$product_info['special']) {
+				$product_info['special'] = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+			} else {
+				$product_info['special'] = false;
+			}
+
+			$product_info['href'] = $this->url->link('product/product',  'product_id=' . $product_info['product_id']);
+
+			$json['product'] = $product_info;
+
 		}
+
+	
+
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+	}
+
+	
+	public function remove() {
+
+		$json = array();
+
+		$customer_id = $this->customer->getId();
+
+		$product_id = $this->request->post['product_id'];
+
+		if ($this->customer->isLogged()) {
+
+			$this->db->query("DELETE FROM ".DB_PREFIX."customer_wishlist WHERE product_id = '".(int)$product_id."' AND customer_id = '".(int)$customer_id."'");
+
+
+
+		} else {
+
+			$new_wishlists = array_values($this->session->data['wishlist']);
+
+			if(isset($new_wishlists)){
+				for($i = 0; $i < count($new_wishlists);$i++){
+					
+					if($new_wishlists[$i] == $product_id) {
+						unset($new_wishlists[$i]);
+					}
+
+				}
+
+				$this->session->data['wishlist'] = $new_wishlists;
+			}
+
+
+		}
+		
+		$json['total'] = count($this->session->data['wishlist']);
+
+		$json['product_id'] = $product_id;
 
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));

@@ -1,7 +1,16 @@
 <?php
 class ControllerCheckoutCart extends Controller {
 	public function index() {
+
+		// ini_set('display_errors', 1);
+		// ini_set('display_startup_errors', 1);
+		// ini_set('log_errors', true);
+		// error_reporting(E_ALL);
+
 		$this->load->language('checkout/cart');
+
+
+	
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -17,7 +26,97 @@ class ControllerCheckoutCart extends Controller {
 			'text' => $this->language->get('heading_title')
 		);
 
-		if ($this->cart->hasProducts() || !empty($this->session->data['vouchers'])) {
+
+
+		if($this->cart->countProducts()){
+			$data['count_cart'] = $this->cart->countProducts();
+		} else {
+			$data['count_cart'] = 0;
+		}
+	
+		
+	
+
+		$this->load->model('account/wishlist');
+		$this->load->model('catalog/product');
+		$this->load->model('tool/image');
+
+
+		if ($this->customer->isLogged()) { 
+			$wish_results = $this->model_account_wishlist->getWishlist();
+		} else {
+			 $wishlist = isset($this->session->data['wishlist']) ? $this->session->data['wishlist'] : [];
+			 $wishlist = array_unique($wishlist);
+				$wish_results = [];
+				foreach ($wishlist as $value){
+					$wish_results[]['product_id'] = $value;
+				}
+		}
+
+		$data['cart_total'] = $this->currency->format($this->tax->calculate($this->cart->getTotal(), 1, $this->config->get('config_tax')), $this->session->data['currency']);
+
+		$data['wish_products'] = array();
+		$data['count_wishlist'] = count($wish_results);
+
+		foreach($wish_results as $result){
+			
+			$product_info = $this->model_catalog_product->getProduct($result['product_id']);
+
+			if ($product_info) {
+				if ($product_info['image']) {
+					$image = $this->model_tool_image->resize($product_info['image'], $this->config->get($this->config->get('config_theme') . '_image_wishlist_width'), $this->config->get($this->config->get('config_theme') . '_image_wishlist_height'));
+				} else {
+					$image = false;
+				}
+
+				if ($product_info['quantity'] <= 0) {
+					$stock = $product_info['stock_status'];
+				} elseif ($this->config->get('config_stock_display')) {
+					$stock = $product_info['quantity'];
+				} else {
+					$stock = $this->language->get('text_instock');
+				}
+
+				if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
+					$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+					$price = false;
+				}
+
+				if ((float)$product_info['special']) {
+					$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+					$special = false;
+				}
+
+				$in_wish_item = false;
+				if(isset($this->session->data['wishlist'])){
+					foreach($this->session->data['wishlist'] as $in_wish){
+						if($in_wish == $product_info['product_id']){
+							$in_wish_item = true;
+						}
+					}
+				}
+
+				$data['wish_products'][] = array(
+					'product_id' => $product_info['product_id'],
+					'thumb'      => $image,
+					'name'       => $product_info['name'],
+					'model'      => $product_info['model'],
+					'stock'      => $stock,
+					'in_wish'      => $in_wish_item,
+					'price'      => $price,
+					'special'    => $special,
+					'href'       => $this->url->link('product/product', 'product_id=' . $product_info['product_id']),
+					'remove'     => $this->url->link('account/wishlist', 'remove=' . $product_info['product_id'])
+				);
+			} else {
+				$this->model_account_wishlist->deleteWishlist($result['product_id']);
+			}
+
+		}
+
+		// if ($this->cart->hasProducts() || !empty($this->session->data['vouchers'])) {
 			$data['heading_title'] = $this->language->get('heading_title');
 
 			$data['text_recurring_item'] = $this->language->get('text_recurring_item');
@@ -76,6 +175,57 @@ class ControllerCheckoutCart extends Controller {
 			$products = $this->cart->getProducts();
 
 			foreach ($products as $product) {
+
+				$options = array();
+
+			foreach ($this->model_catalog_product->getProductOptions($product['product_id']) as $option) {
+				$product_option_value_data = array();
+
+				foreach ($option['product_option_value'] as $option_value) {
+					if (!$option_value['subtract'] || ($option_value['quantity'] > 0)) {
+						if ((($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) && (float)$option_value['price']) {
+							$price = $this->currency->format($this->tax->calculate($option_value['price'], $product_info['tax_class_id'], $this->config->get('config_tax') ? 'P' : false), $this->session->data['currency']);
+						} else {
+							$price = false;
+						}
+
+						$product_option_value_data[] = array(
+							'product_option_value_id' => $option_value['product_option_value_id'],
+							'option_value_id'         => $option_value['option_value_id'],
+							'name'                    => $option_value['name'],
+							'image'                   => $option_value['image'] ? $this->model_tool_image->resize($option_value['image'], 50, 50) : '',
+							'price'                   => $price,
+							'price_prefix'            => $option_value['price_prefix'],
+							'quantity'            => $option_value['quantity'],
+							'quantity_pb_msc'                => $option_value['quantity_pb_msc'],
+							'quantity_1tv_msc'                => $option_value['quantity_1tv_msc'],
+							'quantity_nk_msc'                => $option_value['quantity_nk_msc'],
+							'quantity_dlg_msc'                => $option_value['quantity_dlg_msc'],
+							'quantity_bd_msc'                => $option_value['quantity_bd_msc'],
+							'quantity_tp_msc'                => $option_value['quantity_tp_msc'],
+							'quantity_s_spb'                => $option_value['quantity_s_spb'],
+							'quantity_f_spb'                => $option_value['quantity_f_spb'],
+							'quantity_d_kzn'                => $option_value['quantity_d_kzn'],
+							'quantity_pp_kzn'                => $option_value['quantity_pp_kzn']
+						);
+					}
+				}
+
+				$options[] = array(
+					'product_option_id'    => $option['product_option_id'],
+					'product_option_value' => $product_option_value_data,
+					'option_id'            => $option['option_id'],
+					'name'                 => $option['name'],
+					'type'                 => $option['type'],
+					'value'                => $option['value'],
+					'required'             => $option['required']
+				);
+			}
+
+			// echo '<pre>';
+			// print_r($options);
+			// echo '</pre>';
+
 				$product_total = 0;
 
 				foreach ($products as $product_2) {
@@ -147,23 +297,53 @@ class ControllerCheckoutCart extends Controller {
 						$recurring .= sprintf($this->language->get('text_payment_cancel'), $this->currency->format($this->tax->calculate($product['recurring']['price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']), $product['recurring']['cycle'], $frequencies[$product['recurring']['frequency']], $product['recurring']['duration']);
 					}
 				}
+				
+				
+				$product_info = $this->model_catalog_product->getProduct($product['product_id']);
+
+
+				if ($product_info['special']) {
+					$special = $this->currency->format($this->tax->calculate($product_info['special'], 0, $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+					$special = false;
+				}
+				if ($product_info['price']) {
+					$price = $this->currency->format($this->tax->calculate($product_info['price'], 0, $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+					$price = false;
+				}
+
+				$in_wish_item = false;
+				if(isset($this->session->data['wishlist'])){
+					foreach($this->session->data['wishlist'] as $in_wish){
+						if($in_wish == $product['product_id']){
+							$in_wish_item = true;
+						}
+					}
+				}
+
 
 				$data['products'][] = array(
+					'product_id'   => $product['product_id'],
 					'cart_id'   => $product['cart_id'],
 					'thumb'     => $image,
+					'in_wish'     => $in_wish_item,
 					'name'      => $product['name'],
 					'model'     => $product['model'],
+					'sku'     => $product_info['sku'],
 					'option'    => $option_data,
+					'options'    => $options,
 					'recurring' => $recurring,
 					'quantity'  => $product['quantity'],
 					'stock'     => $product['stock'] ? true : !(!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning')),
 					'reward'    => ($product['reward'] ? sprintf($this->language->get('text_points'), $product['reward']) : ''),
 					'price'     => $price,
+					'special'     => $special,
 					'total'     => $total,
 					'href'      => $this->url->link('product/product', 'product_id=' . $product['product_id'])
 				);
 			}
-
+	
 			// Gift Voucher
 			$data['vouchers'] = array();
 
@@ -233,7 +413,17 @@ class ControllerCheckoutCart extends Controller {
 
 			$data['continue'] = $this->url->link('common/home');
 
-			$data['checkout'] = $this->url->link('checkout/checkout', '', true);
+			$this->session->data['typeAuth'] = 'checkout';
+
+			if($this->customer->isLogged()){
+				$data['checkout'] = $this->url->link('checkout/checkout', '', true);
+			} else {
+
+
+				$data['checkout'] = $this->url->link('checkout/auth', '', true);
+			}
+
+			
 
 			$this->load->model('extension/extension');
 
@@ -259,26 +449,70 @@ class ControllerCheckoutCart extends Controller {
 			$data['header'] = $this->load->controller('common/header');
 
 			$this->response->setOutput($this->load->view('checkout/cart', $data));
+		// } else {
+		// 	$data['heading_title'] = $this->language->get('heading_title');
+
+		// 	$data['text_error'] = $this->language->get('text_empty');
+
+		// 	$data['button_continue'] = $this->language->get('button_continue');
+
+		// 	$data['continue'] = $this->url->link('common/home');
+
+		// 	unset($this->session->data['success']);
+
+		// 	$data['column_left'] = $this->load->controller('common/column_left');
+		// 	$data['column_right'] = $this->load->controller('common/column_right');
+		// 	$data['content_top'] = $this->load->controller('common/content_top');
+		// 	$data['content_bottom'] = $this->load->controller('common/content_bottom');
+		// 	$data['footer'] = $this->load->controller('common/footer');
+		// 	$data['header'] = $this->load->controller('common/header');
+
+		// 	$this->response->setOutput($this->load->view('checkout/cart', $data));
+		// }
+	}
+
+	public function updateSize() {
+
+		ini_set('display_errors', 1);
+		ini_set('display_startup_errors', 1);
+		ini_set('log_errors', true);
+		error_reporting(E_ALL);
+
+
+		$json = array();
+
+
+		$cart_id = $this->request->post['cart_id'];
+		$option_value_id = $this->request->post['option_value_id'];
+		$product_option_value_id = $this->request->post['product_option_value_id'];
+
+		$json['cart_id'] = $cart_id;
+		$json['option_value_id'] = $option_value_id;
+		$json['product_option_value_id'] = $product_option_value_id;
+
+		if($this->customer->isLogged()) {
+			$customer_id = $this->customer->getId();
 		} else {
-			$data['heading_title'] = $this->language->get('heading_title');
-
-			$data['text_error'] = $this->language->get('text_empty');
-
-			$data['button_continue'] = $this->language->get('button_continue');
-
-			$data['continue'] = $this->url->link('common/home');
-
-			unset($this->session->data['success']);
-
-			$data['column_left'] = $this->load->controller('common/column_left');
-			$data['column_right'] = $this->load->controller('common/column_right');
-			$data['content_top'] = $this->load->controller('common/content_top');
-			$data['content_bottom'] = $this->load->controller('common/content_bottom');
-			$data['footer'] = $this->load->controller('common/footer');
-			$data['header'] = $this->load->controller('common/header');
-
-			$this->response->setOutput($this->load->view('error/not_found', $data));
+			$session_id = $this->session->getId();
 		}
+
+		$json['session_id'] = $session_id;
+
+		$option[$option_value_id] = $product_option_value_id;
+
+		$hasCartItem = $this->db->query("SELECT * FROM ".DB_PREFIX."cart WHERE cart_id = '".(int)$cart_id."'");
+
+		if($hasCartItem->num_rows){
+		
+			$this->db->query("UPDATE `".DB_PREFIX."cart` SET `option` = '".json_encode($option)."' WHERE cart_id = $cart_id;");
+
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+ if (function_exists('Wbr')) { global $light_modify_cart; if (!$light_modify_cart) $cht=1; else if (VERSION<"2.0") $cht=$this->getChild('module/cart'); else $cht=$this->load->controller('common/cart'); Wbr($cht); } // Lightning 
+		$this->response->setOutput(json_encode($json));
+
+		
 	}
 
 	public function add() {
@@ -392,6 +626,8 @@ class ControllerCheckoutCart extends Controller {
 					array_multisort($sort_order, SORT_ASC, $totals);
 				}
 
+				$json['count_cart'] = $this->cart->countProducts();
+
 				$json['total'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total, $this->session->data['currency']));
 			} else {
 				$json['redirect'] = str_replace('&amp;', '&', $this->url->link('product/product', 'product_id=' . $this->request->post['product_id']));
@@ -437,6 +673,9 @@ class ControllerCheckoutCart extends Controller {
 
 		// Remove
 		if (isset($this->request->post['key'])) {
+
+			$json['cart_id'] = $this->request->post['key'];
+			
 			$this->cart->remove($this->request->post['key']);
 
 			unset($this->session->data['vouchers'][$this->request->post['key']]);
@@ -492,6 +731,8 @@ class ControllerCheckoutCart extends Controller {
 
 				array_multisort($sort_order, SORT_ASC, $totals);
 			}
+
+			$json['count_cart'] = $this->cart->countProducts();
 
 			$json['total'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total, $this->session->data['currency']));
 		}

@@ -1,13 +1,30 @@
 <?php
 class ModelCatalogCategory extends Model {
 	public function getCategory($category_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c.category_id = '" . (int)$category_id . "' AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND c.status = '1'");
+
+		if(isset($this->session->data['store'])){
+			$store_id = $this->session->data['store'];
+		} else {
+			$store_id = 0;
+		} 
+
+		
+		$query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c.category_id = '" . (int)$category_id . "' AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND c2s.store_id = '" . (int)$store_id . "' AND c.status = '1'");
 
 		return $query->row;
 	}
 
 	public function getCategories($parent_id = 0) {
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c.parent_id = '" . (int)$parent_id . "' AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1' ORDER BY c.sort_order, LCASE(cd.name)");
+
+		if(isset($this->session->data['store'])){
+			$store_id = $this->session->data['store'];
+		} else {
+			$store_id = 0;
+		} 
+
+		
+
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c.parent_id = '" . (int)$parent_id . "' AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND c2s.store_id = '" . (int)$store_id . "'  AND c.status = '1' ORDER BY c.sort_order, LCASE(cd.name)");
 
 		return $query->rows;
 	}
@@ -16,15 +33,67 @@ class ModelCatalogCategory extends Model {
 
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category_to_store c2s WHERE c2s.store_id = '".(int)$store_id."'");
 
+
+		return $query->rows;
+
+	}
+	public function getChildCategoriesByStore($store_id,$category_id) {
+
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c.parent_id = '" . (int)$category_id . "' AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND c2s.store_id = '" . (int)$store_id . "'  AND c.status = '1' ORDER BY c.sort_order, LCASE(cd.name)");
+
+	
+
+		return $query->rows;
+
+	}
+	public function getParentCategory($store_id = 0, $category_id = 0) {
+
+		$query = $this->db->query("SELECT c.parent_id FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON(c2s.category_id = c.category_id) WHERE c.category_id = '".(int)$category_id."' AND c2s.store_id = '".(int)$store_id."'");
+		// $sql = "SELECT c.parent_id FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON(c2s.category_id = c.category_id) WHERE c.category_id = '".(int)$category_id."' AND c2s.store_id = '".(int)$store_id."'";
+		// echo '<pre>';
+		// 	print_r($sql);
+	
+		// 	echo '</pre>';
+		return $query->row['parent_id'];
+
+	}
+	public function getCategoriesChildByStore($store_id,$category_id) {
+
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON(c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON(c2s.category_id = cd.category_id) WHERE c.parent_id = '".(int)$category_id."' AND c2s.store_id = '".(int)$store_id."'");
+
 		return $query->rows;
 
 	}
 	public function getStore($store_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
 
-		return $query->row;
+		if($store_id){
+			$query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
+
+			return $query->row;
+
+		} else {
+
+			$store_info['store_id'] = 0;
+			$store_info['name'] = 'Интернет-магазин';
+			$store_info['url'] = 'lknl-dev.ru';
+			$store_info['ssl'] = '';
+
+
+			return $store_info;
+		}
+
+
+		
 	}
 	public function getCategoryFilters($category_id) {
+
+		if(isset($this->session->data['store'])){
+			$store_id = $this->session->data['store'];
+		} else {
+			$store_id = 0;
+		} 
+
+
 		$implode = array();
 
 		$query = $this->db->query("SELECT filter_id FROM " . DB_PREFIX . "category_filter WHERE category_id = '" . (int)$category_id . "'");
@@ -64,7 +133,14 @@ class ModelCatalogCategory extends Model {
 	}
 
 	public function getCategoryLayoutId($category_id) {
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
+
+		if(isset($this->session->data['store'])){
+			$store_id = $this->session->data['store'];
+		} else {
+			$store_id = 0;
+		} 
+
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "' AND store_id = '" . (int)$store_id . "'");
 
 		if ($query->num_rows) {
 			return $query->row['layout_id'];
@@ -74,7 +150,14 @@ class ModelCatalogCategory extends Model {
 	}
 
 	public function getTotalCategoriesByCategoryId($parent_id = 0) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c.parent_id = '" . (int)$parent_id . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND c.status = '1'");
+
+		if(isset($this->session->data['store'])){
+			$store_id = $this->session->data['store'];
+		} else {
+			$store_id = 0;
+		} 
+
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c.parent_id = '" . (int)$parent_id . "' AND c2s.store_id = '" . (int)$store_id . "' AND c.status = '1'");
 
 		return $query->row['total'];
 	}

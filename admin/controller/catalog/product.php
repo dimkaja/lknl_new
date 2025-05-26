@@ -1032,6 +1032,18 @@ class ControllerCatalogProduct extends Controller {
 			$data['stock_status_id'] = 0;
 		}
 
+		$this->load->model('catalog/sizes');
+
+        $data['sizess'] = $this->model_catalog_sizes->getSizess();
+
+        if (isset($this->request->post['sizes_id'])) {
+            $data['sizes_id'] = $this->request->post['sizes_id'];
+        } elseif (!empty($product_info)) {
+            $data['sizes_id'] = $product_info['sizes_id'];
+        } else {
+            $data['sizes_id'] = 0;
+        }
+
 		if (isset($this->request->post['status'])) {
 			$data['status'] = $this->request->post['status'];
 		} elseif (!empty($product_info)) {

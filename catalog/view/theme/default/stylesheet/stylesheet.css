@@ -17,6 +17,7 @@ html{font-family:'__tStar_4eebf3', '__tStar_Fallback_4eebf3', sans-serif}
 	padding: 0;
 	margin: 0;
 	box-sizing: border-box;
+    font-synthesis: none !important;
 }
 
 html,
@@ -115,14 +116,19 @@ html {
 }
 
 
-body.common-home {
+body {
     background-color: #eeedea;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 div#search input[name="search"] {
     display: none;
 }
-
+.dream-filter .panel {
+    margin-top: 0;
+    border: none;
+}
 header {
 	max-width: 700px;
 	width: 100%;
@@ -473,7 +479,7 @@ body .select2-results__option:hover {
     text-decoration: none;
 }
 
-ul.menu_categories li:nth-child(3) {
+ul.menu_categories > li:nth-child(3) {
     margin-bottom: 48px;
 }
 
@@ -542,6 +548,8 @@ html { overflow: -moz-scrollbars-none; }
     text-transform: uppercase;
     font-family: '__tStar_Fallback_4eebf3', sans-serif;
 }
+
+
 
 @media (max-width: 720px) {
     .nav_bottom_values {

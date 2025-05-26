@@ -92,12 +92,21 @@ class ControllerCommonHome extends Controller {
 				$prev_image = $this->model_tool_image->resize('placeholder.png', $this->config->get($this->config->get('config_theme') . '_image_product_width'), $this->config->get($this->config->get('config_theme') . '_image_product_height'));
 			}
 
+			$in_wish_item = false;
+			if(isset($this->session->data['wishlist'])){
+				foreach($this->session->data['wishlist'] as $in_wish){
+					if($in_wish == $product['product_id']){
+						$in_wish_item = true;
+					}
+				}
+			}
+
 			$data['products'][] = array(
 				'product_id' => $product['product_id'],
 				'name' => $product['name'],
 				'image' => $image,
+				'in_wish' => $in_wish_item,
 				'prev_image' => $prev_image,
-				'product_id' => $product['name'],
 				'price' => $price,
 				'special' => $special,
 				'href'        => $this->url->link('product/product',  'product_id=' . $product['product_id'])

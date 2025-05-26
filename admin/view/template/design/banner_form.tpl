@@ -100,7 +100,9 @@
       </div>
     </div>
   </div>
-  <script type="text/javascript"><!--
+
+
+  <script type="text/javascript">
 var image_row = <?php echo $image_row; ?>;
 
 function addImage(language_id) {
@@ -116,7 +118,9 @@ function addImage(language_id) {
 	
 	image_row++;
 }
-//--></script> 
+</script> 
+
+
   <script type="text/javascript"><!--
 $('#language a:first').tab('show');
 //--></script> 

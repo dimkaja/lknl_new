@@ -1,0 +1,60 @@
+.account-address button.back_to_page {
+    padding: 27px 16px 23px;
+}
+
+.address_list_wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 16px 16px 166px;
+}
+
+button.add_address_btn svg {
+    display: inline-block;
+    width: 12px;
+    height: 11px;
+    margin-right: 12px;
+}
+
+button.add_address_btn {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    display: flex
+;
+    align-items: center;
+    margin-top: 16px;
+    padding: 16px 0;
+    color: #676560;
+    text-align: left;
+    font-family: '__tStar_4eebf3', __tStar_Fallback_4eebf3, sans-serif;
+}
+
+.address_list_box {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+}
+
+p.address_not_text {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2.3px;
+    color: rgb(158, 155, 153);
+    text-align: left;
+    font-family: '__tStar_4eebf3', __tStar_Fallback_4eebf3, sans-serif;
+    font-size: 10px;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.address_list_box > p:not(.address_not_text) {
+    color: rgb(103, 101, 96);
+    font-size: 12px;
+}

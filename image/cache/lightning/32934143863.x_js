@@ -1,3 +1,5 @@
+
+
 function getURLVar(key) {
 	var value = [];
 
@@ -22,7 +24,85 @@ function getURLVar(key) {
 	}
 }
 
+
+
 $(document).ready(function() {
+
+
+
+	$('body').on('click','.magazines_select .cities ul li',function(){
+
+		$('.magazines_select .cities ul li').removeClass('checked');
+		$(this).addClass('checked');
+		
+		$('.magazines_select .cities .city_selected').html($(this).text().trim());
+
+		var curMagazine = $(this).text().trim();
+
+		if($('.rdf-filters').length > 0){
+
+			$('.rdf-filters .panel-group .panel').each(function(){
+				var titleParam = $(this).find('.panel-title').text().trim();
+
+				if(curMagazine == titleParam){
+					$('.rdf-filters .panel-collapse.collapse:not(.in)').removeClass('show');
+					var optionLength =$(this).find('input[type="checkbox"]').length;
+
+				
+					$('.magazines_text span').html('('+optionLength+')');
+
+					$('.rdf-filters .panel-group .panel').find('input[type="checkbox"]').prop('checked',false);
+					$(this).find('input[type="checkbox"]').removeAttr('disabled');
+					$(this).find('input[type="checkbox"]').prop('checked',true);
+
+					$(this).find('input[type="checkbox"]:first-child').change();
+
+					$(this).find('.panel-collapse.collapse').addClass('show');
+
+					setTimeout(function(){
+						var textBtn = $('.dream-filter .popper span').text().trim();
+
+						var textBtnSplit = textBtn.split(' ');
+	
+						var countProduct = textBtnSplit[1]
+						
+						$('.dream-filter .popper button').text('Показать' + ' ('+countProduct+')');
+
+					},300);
+				
+
+				}
+
+			});
+
+		}
+
+		return false;
+	});
+	$('body').on('click','.filter_products',function(){
+		
+		$('section.dream-filter').fadeIn();
+		$('section.dream-filter').toggleClass('open');
+
+		$('.rdf-filters .panel-group .panel input[type="checkbox"]:first-child').change();
+
+		return false;
+	});
+	$('body').on('click','.close_filter',function(){
+		
+		$('section.dream-filter').fadeOut();
+
+		return false;
+	});
+	$('body').on('click','nav ul.menu_categories li.dropdown a.dropdown-toggle',function(){
+		$(this).parent().toggleClass('open');
+
+
+		$(this).parent().find('.dropdown-menu').slideToggle();
+
+		return false;
+	});
+
 
 	$('div#search input[type="text"]').keyup(function(){
 		$('.search_content button').remove();
@@ -85,6 +165,7 @@ $(document).ready(function() {
 				console.log(data);
 			},
 			success: function(json) {
+				console.log(json);
 				if(json['categories']){
 					
 					var categories = '';
@@ -94,7 +175,33 @@ $(document).ready(function() {
 						var category_name = json['categories'][key].name;
 						var category_href = json['categories'][key].href;
 
-						categories += '<li><a href="'+category_href+'">'+category_name+'</a></li>';
+						if(json['categories'][key]['children'] && json['categories'][key]['children'] != ''){
+
+							categories += '<li class="dropdown">';
+							categories += '<a href="'+category_href+'" class="dropdown-toggle" data-toggle="dropdown">'+category_name+'</a>';
+
+							categories += '	<div class="dropdown-menu">';
+							categories += '<div class="dropdown-inner">';
+							
+							categories += '	<ul class="list-unstyled">';
+								for(child in json['categories'][key]['children']) {
+
+									var category_name_child = json['categories'][key]['children'][child].name;
+									var category_href_child = json['categories'][key]['children'][child].href;
+
+									categories += '<li><a href="'+category_href_child+'">'+category_name_child+'</a></li>';
+								}
+							
+								categories += '</ul>';
+							
+								categories += '</div>';
+								categories += '</div>';
+								categories += '</li>';
+
+						} else {
+							categories += '<li><a href="'+category_href+'">'+category_name+'</a></li>';
+						}
+					
 
 					}
 					$('.menu_categories').html(categories);

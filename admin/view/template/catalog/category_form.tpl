@@ -56,6 +56,12 @@
                     </div>
                   </div>
                   <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-meta-title<?php echo $language['language_id']; ?>">Текст ссылки для родительской категории</label>
+                    <div class="col-sm-10">
+                      <input type="text" name="category_description[<?php echo $language['language_id']; ?>][text_all]" value="<?php echo isset($category_description[$language['language_id']]) ? $category_description[$language['language_id']]['text_all'] : ''; ?>" placeholder="Текст ссылки" id="input-meta-title<?php echo $language['language_id']; ?>" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label class="col-sm-2 control-label" for="input-meta-title<?php echo $language['language_id']; ?>"><?php echo $entry_meta_title; ?></label>
                     <div class="col-sm-10">
                       <input type="text" name="category_description[<?php echo $language['language_id']; ?>][meta_title]" value="<?php echo isset($category_description[$language['language_id']]) ? $category_description[$language['language_id']]['meta_title'] : ''; ?>" placeholder="<?php echo $entry_meta_title; ?>" id="input-meta-title<?php echo $language['language_id']; ?>" class="form-control" />

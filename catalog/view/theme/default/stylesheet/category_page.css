@@ -1,0 +1,113 @@
+.product_content_box {
+    max-width: 700px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+pre {
+    display: none;
+}
+
+h1 {
+    display: none;
+}
+
+.categories_top .category_item a {
+    position: static;
+    text-align: left;
+    font-family: __tStar_4eebf3, __tStar_Fallback_4eebf3, sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    color: inherit;
+    text-align: left;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase ;
+    display: block;
+    padding: 16px;
+    padding-top: 0;
+    padding-bottom: 0;
+    white-space: nowrap;
+    cursor: pointer;
+
+}
+
+.categories_top {
+    display: flex
+;
+}
+
+.product_content {
+    display: none;
+}
+
+.product_content.showed {
+    display: block;
+}
+
+.selected_category {
+    font-family: '__tStar_4eebf3', '__tStar_Fallback_4eebf3', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    color: #1d1d1d;
+    text-align: left;
+    list-style: none;
+    display: flex
+;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    padding-right: 16px;
+    position: relative;
+    display: table;
+    cursor: pointer;
+}
+
+.select_box .selected_category:after {
+    content: '';
+    display: inline-block;
+    background: url(/image/arrow-down-no-extra-space.svg) center no-repeat;
+    background-size: cover;
+    background-size: 12px;
+    width: 12px;
+    height: 8px;
+    position: absolute;
+    top: 50%;
+    margin-top: -4px;
+    right: 0;
+}
+
+.select_box .categories_top_content .category_item.checked.checked a {
+    background: url(/image/check.svg) no-repeat right 16px center;
+}
+
+.categories_top_content {
+    display: flex;
+    position: relative;
+
+}
+
+body .categories_top.select_box .category_item a {
+    font-size: 12px;
+}
+
+
+.categories_top .category_item.checked a{
+    font-family: '__tStar_Fallback_4eebf3', sans-serif;
+}
+
+.categories_top:not(.select_box) .category_item a {
+    padding: 16px;
+}
+
+@media (max-width: 708px) {
+    .product_content {
+        padding: 16px 8px;
+    }
+}

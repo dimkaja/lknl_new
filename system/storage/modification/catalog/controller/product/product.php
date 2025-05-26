@@ -3,8 +3,15 @@ class ControllerProductProduct extends Controller {
 	private $error = array();
 
 	public function index() {
-		$this->load->language('product/product');
+
  if (function_exists('Wga')) Wga(); // Lightning 
+		
+		ini_set('display_errors', 1);
+		ini_set('display_startup_errors', 1);
+		ini_set('log_errors', true);
+		error_reporting(E_ALL);
+
+		$this->load->language('product/product');
 
 		$data['breadcrumbs'] = array();
 
@@ -159,7 +166,27 @@ class ControllerProductProduct extends Controller {
 
 		$product_info = $this->model_catalog_product->getProduct($product_id);
 
+		$data['adresses'] = $this->model_catalog_product->getAdresses();
+
+		$data['product_availables'] = $this->model_catalog_product->getProductAvailables($product_id);
+
+		// echo '<pre>';
+		// print_r($data['adresses']);
+		// print_r($data['product_availables']);
+		// echo '</pre>';
+
+
 		if ($product_info) {
+
+			$data['in_wish_item'] = false;
+			if(isset($this->session->data['wishlist'])){
+				foreach($this->session->data['wishlist'] as $in_wish){
+					if($in_wish == $product_info['product_id']){
+						$data['in_wish_item'] = true;
+					}
+				}
+			}
+
 			$url = '';
 
 			if (isset($this->request->get['path'])) {
@@ -221,6 +248,7 @@ class ControllerProductProduct extends Controller {
 				$this->document->setTitle($product_info['name']);
 			}
 
+
 			$this->document->setDescription($product_info['meta_description']);
 			$this->document->setKeywords($product_info['meta_keyword']);
 			$this->document->addLink($this->url->link('product/product', 'product_id=' . $this->request->get['product_id']), 'canonical');
@@ -278,9 +306,11 @@ class ControllerProductProduct extends Controller {
 			$data['manufacturer'] = $product_info['manufacturer'];
 			$data['manufacturers'] = $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $product_info['manufacturer_id']);
 			$data['model'] = $product_info['model'];
+			$data['sku'] = $product_info['sku'];
 			$data['reward'] = $product_info['reward'];
 			$data['points'] = $product_info['points'];
 			$data['description'] = html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8');
+			$data['sizes'] = html_entity_decode($product_info['sizes'], ENT_QUOTES, 'UTF-8');
 
 			if ($product_info['quantity'] <= 0) {
 				$data['stock'] = $product_info['stock_status'];
@@ -364,7 +394,18 @@ class ControllerProductProduct extends Controller {
 							'name'                    => $option_value['name'],
 							'image'                   => $option_value['image'] ? $this->model_tool_image->resize($option_value['image'], 50, 50) : '',
 							'price'                   => $price,
-							'price_prefix'            => $option_value['price_prefix']
+							'price_prefix'            => $option_value['price_prefix'],
+							'quantity'            => $option_value['quantity'],
+							'quantity_pb_msc'                => $option_value['quantity_pb_msc'],
+							'quantity_1tv_msc'                => $option_value['quantity_1tv_msc'],
+							'quantity_nk_msc'                => $option_value['quantity_nk_msc'],
+							'quantity_dlg_msc'                => $option_value['quantity_dlg_msc'],
+							'quantity_bd_msc'                => $option_value['quantity_bd_msc'],
+							'quantity_tp_msc'                => $option_value['quantity_tp_msc'],
+							'quantity_s_spb'                => $option_value['quantity_s_spb'],
+							'quantity_f_spb'                => $option_value['quantity_f_spb'],
+							'quantity_d_kzn'                => $option_value['quantity_d_kzn'],
+							'quantity_pp_kzn'                => $option_value['quantity_pp_kzn']
 						);
 					}
 				}
@@ -414,53 +455,182 @@ class ControllerProductProduct extends Controller {
 
 			$data['attribute_groups'] = $this->model_catalog_product->getProductAttributes($this->request->get['product_id']);
 
+			    // Цвет
+				$data['colors'] = array();
+				$data['product_id'] = $this->request->get['product_id'];
+				$resultz = $this->model_catalog_product->getProductColor($this->request->get['product_id']);
+
+				$data['colorasprod'] = $product_info['colorasprod'];
+
+				
+
+				$width = $this->config->get('colorasproduct_width');
+				$height = $this->config->get('colorasproduct_height');
+				if (empty($width)) {
+					$width = 170;
+				}
+				if (empty($height)) {
+					$height = 90;
+				}
+				foreach ($resultz as $result) {
+					if ($result['image']) {
+						$image = $this->model_tool_image->resize($result['image'], $width, $height);
+					} else {
+						$image = $this->model_tool_image->resize('placeholder.png', $width, $height);
+					}
+					
+					
+					$sql = $this->model_catalog_product->getProduct($result['product_id']);
+					if (!empty($sql['special'])) {
+					  $price = $sql['special'];
+					} else {
+					  $price = $sql['price'];
+					}
+					
+	
+					if (!empty($sql['htmlcolor'])) {
+						$htmlcolor = $sql['htmlcolor'];
+						$htmlerror = 0;
+					} else {
+						$htmlcolor = $this->model_tool_image->resize($result['image'], 34, 34);
+						$htmlerror = 1;
+					}
+	
+					
+					$data['colors'][$sql['colorasprod']] = array(
+						'product_id'  => $result['product_id'],
+						'href'        => $this->url->link('product/product', 'product_id=' . $result['product_id'] ),
+						'colors'      => $sql['colorasprod'],
+						'image'       => $image,
+						'htmlcolor'   => $htmlcolor,
+						'quantity'    => $sql['quantity'],
+						'name'        => $sql['name'],
+						'htmlerror'   => $htmlerror,
+						'price'       => $this->currency->format($this->tax->calculate($price, $sql['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency'])
+					);
+				}
+				asort($data['colors']);
+				$data['colorasproduct_method'] = nl2br($this->config->get('colorasproduct_method'));
+				$data['colorasproduct_price'] = nl2br($this->config->get('colorasproduct_price'));
+				$styles = nl2br($this->config->get('colorasproduct_style'));
+				$stylesmin = nl2br($this->config->get('colorasproduct_stylemin'));
+				$data['colorasproduct_selector'] = nl2br($this->config->get('colorasproduct_selector'));
+	$this->document->addStyle('catalog/view/theme/default/stylesheet/colorasproduct.css');
+			// Цвет	
+
+			$data['cities'] = $this->model_catalog_product->getStores();
+
+		
+
 			$data['products'] = array();
 
-			$results = $this->model_catalog_product->getProductRelated($this->request->get['product_id']);
 
-			foreach ($results as $result) {
-				if ($result['image']) {
-					$image = $this->model_tool_image->resize($result['image'], $this->config->get($this->config->get('config_theme') . '_image_related_width'), $this->config->get($this->config->get('config_theme') . '_image_related_height'));
-				} else {
-					$image = $this->model_tool_image->resize('placeholder.png', $this->config->get($this->config->get('config_theme') . '_image_related_width'), $this->config->get($this->config->get('config_theme') . '_image_related_height'));
-				}
+			if (isset($this->request->get['page'])) {
+				$page = $this->request->get['page'];
+			} else {
+				$page = 1;
+			}
+	
+			if (isset($this->request->get['limit'])) {
+				$limit = 1;
+			} else {
+				$limit = 1;
+			}
 
+			$start = ($page - 1) * $limit;
+
+			$results = $this->model_catalog_product->getProductRelated($this->request->get['product_id'], $start, $limit);
+
+	
+
+			foreach($results as $product){
+			
 				if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
-					$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+					$price = $this->currency->format($this->tax->calculate($product['price'], 0, $this->config->get('config_tax')), $this->session->data['currency']);
 				} else {
 					$price = false;
 				}
-
-				if ((float)$result['special']) {
-					$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+	
+				if ((float)$product['special']) {
+					$special = $this->currency->format($this->tax->calculate($product['special'], 0, $this->config->get('config_tax')), $this->session->data['currency']);
 				} else {
 					$special = false;
 				}
-
-				if ($this->config->get('config_tax')) {
-					$tax = $this->currency->format((float)$result['special'] ? $result['special'] : $result['price'], $this->session->data['currency']);
+	
+				if ($product['image']) {
+					$image = '/image/'.$product['image'];
 				} else {
-					$tax = false;
+					$image = $this->model_tool_image->resize('placeholder.png', $this->config->get($this->config->get('config_theme') . '_image_product_width'), $this->config->get($this->config->get('config_theme') . '_image_product_height'));
 				}
+				
 
-				if ($this->config->get('config_review_status')) {
-					$rating = (int)$result['rating'];
+				$prev_image = $this->model_catalog_product->getProductImages($product['product_id']);
+
+				if (isset($prev_image[0]['image']) && $prev_image[0]['image']) {
+					$prev_image = '/image/'.$prev_image[0]['image'];
 				} else {
-					$rating = false;
+					$prev_image = $this->model_tool_image->resize('placeholder.png', $this->config->get($this->config->get('config_theme') . '_image_product_width'), $this->config->get($this->config->get('config_theme') . '_image_product_height'));
 				}
-
+				$in_wish_item = false;
+				if(isset($this->session->data['wishlist'])){
+					foreach($this->session->data['wishlist'] as $in_wish){
+						if($in_wish == $product['product_id']){
+							$in_wish_item = true;
+						}
+					}
+				}
+	
 				$data['products'][] = array(
-					'product_id'  => $result['product_id'],
-					'thumb'       => $image,
-					'name'        => $result['name'],
-					'description' => utf8_substr(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')), 0, $this->config->get($this->config->get('config_theme') . '_product_description_length')) . '..',
-					'price'       => $price,
-					'special'     => $special,
-					'tax'         => $tax,
-					'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,
-					'rating'      => $rating,
-					'href'        => $this->url->link('product/product', 'product_id=' . $result['product_id'])
-				);
+					'product_id' => $product['product_id'],
+					'name' => $product['name'],
+					'image' => $image,
+					'in_wish' => $in_wish_item,
+					'prev_image' => $prev_image,
+					'product_id' => $product['name'],
+					'price' => $price,
+					'special' => $special,
+					'href'        => $this->url->link('product/product',  'product_id=' . $product['product_id'])
+				 );
+	
+			}
+
+			
+
+			$product_related_total = $this->model_catalog_product->getProductRelatedTotal($this->request->get['product_id']);
+
+			if(isset($this->session->data['store'])){
+				$store_id = $this->session->data['store'];
+			} else {
+				$store_id = 0;
+			}
+			
+
+			$filter_data = array(
+				'store_id'              => $store_id
+			);
+
+
+			$pagination = new Pagination();
+			$pagination->total = $product_related_total;
+			$pagination->page = $page;
+			$pagination->limit = $limit;
+			$pagination->url = $this->url->link('product/category', 'path=' . $this->request->get['path'] . $url . '&page={page}');
+
+			$data['pagination'] = $pagination->render();
+
+			$data['results'] = sprintf($this->language->get('text_pagination'), ($product_related_total) ? (($page - 1) * $limit) + 1 : 0, ((($page - 1) * $limit) > ($product_related_total - $limit)) ? $product_related_total : ((($page - 1) * $limit) + $limit), $product_related_total, ceil($product_related_total / $limit));
+
+			// http://googlewebmastercentral.blogspot.com/2011/09/pagination-with-relnext-and-relprev.html
+			if ($page == 1) {
+			    $this->document->addLink($this->url->link('product/category', 'path=' . $category_info['category_id'], true), 'canonical');
+			} elseif ($page == 2) {
+			    $this->document->addLink($this->url->link('product/category', 'path=' . $category_info['category_id'], true), 'prev');
+			} else {
+			    $this->document->addLink($this->url->link('product/category', 'path=' . $category_info['category_id'] . '&page='. ($page - 1), true), 'prev');
+			}
+
+			if ($limit && ceil($product_related_total / $limit) > $page) {
+			    $this->document->addLink($this->url->link('product/category', 'path=' . $category_info['category_id'] . '&page='. ($page + 1), true), 'next');
 			}
 
 			$data['tags'] = array();

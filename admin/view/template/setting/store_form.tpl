@@ -33,6 +33,7 @@
           <ul class="nav nav-tabs">
             <li class="active"><a href="#tab-general" data-toggle="tab"><?php echo $tab_general; ?></a></li>
             <li><a href="#tab-store" data-toggle="tab"><?php echo $tab_store; ?></a></li>
+            <li><a href="#tab-adresses" data-toggle="tab">Адреса</a></li>
             <li><a href="#tab-local" data-toggle="tab"><?php echo $tab_local; ?></a></li>
             <li><a href="#tab-option" data-toggle="tab"><?php echo $tab_option; ?></a></li>
             <li><a href="#tab-image" data-toggle="tab"><?php echo $tab_image; ?></a></li>
@@ -120,6 +121,85 @@
                 </div>
               </div>
             </div>
+            <div class="tab-pane" id="tab-adresses">
+              <ul class="nav nav-tabs" id="store-language">
+                <?php foreach ($languages as $language) { ?>
+                <li><a href="#store-language<?php echo $language['language_id']; ?>" data-toggle="tab"><img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" title="<?php echo $language['name']; ?>" /> <?php echo $language['name']; ?></a></li>
+                <?php } ?>
+              </ul>
+
+              <div class="tab-content">
+                <?php $adress_row = 0; ?>
+                <?php foreach ($languages as $language) { ?>
+                <div class="tab-pane active" id="content-language<?php echo $language['language_id']; ?>">
+
+                  <div class="adress_content_box">
+           
+                      <div class="adress_content_box_wrapper">
+
+
+                        <?php if($addresses && !empty($addresses)) { ?>
+                        <?php foreach ($addresses[$language['language_id']] as $address) { ?>
+
+                 
+                        <div class="adress_content adress_row<?php echo $adress_row; ?>">
+                          <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-adress[<?php echo $language['language_id']; ?>]">Адрес</label>
+                            <div class="col-sm-10">
+                              <input type="text" name="address[<?php echo $language['language_id']; ?>][<?php echo $adress_row; ?>][adress]" value="<?php echo $addresses[$language['language_id']][$adress_row]['address'] ?>" placeholder="Адрес магазина" id="input-adress<?php echo $adress_row; ?>" class="form-control" />
+                              <?php if (isset($error_meta_title[$language['language_id']])) { ?>
+                              <div class="text-danger"><?php echo $error_meta_title[$language['language_id']]; ?></div>
+                              <?php } ?>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-short-adress<?php echo $adress_row; ?>">Короткий адрес (метро)</label>
+                            <div class="col-sm-10">
+                              <input type="text" name="address[<?php echo $language['language_id']; ?>][<?php echo $adress_row; ?>][short_address]" value="<?php echo $addresses[$language['language_id']][$adress_row]['short_address'] ?>" placeholder="Краткое обозначение" id="input-short-adress<?php echo $adress_row; ?>" class="form-control" />
+                              <?php if (isset($error_meta_title[$language['language_id']])) { ?>
+                              <div class="text-danger"><?php echo $error_meta_title[$language['language_id']]; ?></div>
+                              <?php } ?>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-short-adress<?php echo $adress_row; ?>">Порядок сортировки</label>
+                            <div class="col-sm-2">
+                              <input type="text" name="address[<?php echo $language['language_id']; ?>][<?php echo $adress_row; ?>][sort_order]" value="<?php echo $addresses[$language['language_id']][$adress_row]['sort_order'] ?>" placeholder="Порядок сортировки" id="input-short-adress<?php echo $adress_row; ?>" class="form-control" />
+                              <?php if (isset($error_meta_title[$language['language_id']])) { ?>
+                              <div class="text-danger"><?php echo $error_meta_title[$language['language_id']]; ?></div>
+                              <?php } ?>
+                            </div>
+                          </div>
+                        </div>
+                    
+                        <?php $n_lang = $language['language_id']; ?>
+                        <button type="button" onclick="$('#content-language<?php echo $n_lang; ?> .adress_content.adress_row<?php echo $adress_row; ?>').remove();" data-toggle="tooltip" title="Удалить" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+                        <?php $adress_row++; ?>
+
+
+                        <?php } ?>
+                        <?php } ?>
+                       
+                        
+                      </div>
+
+                    
+                
+                      
+           
+                           </div>
+
+                  <button type="button" onclick="addAdress('<?php echo $language['language_id']; ?>');" data-toggle="tooltip" title="Добавить адрес" class="btn btn-primary addAddress"><i class="fa fa-plus-circle"></i></button>
+              
+                  
+                </div>
+              
+                <?php } ?>
+              </div>
+
+            </div>
+
+
             <div class="tab-pane" id="tab-store">
               <ul class="nav nav-tabs" id="store-language">
                 <?php foreach ($languages as $language) { ?>
@@ -655,5 +735,72 @@ $('select[name=\'config_country_id\']').trigger('change');
 
 $('#store-language a:first').tab('show');
 $('#content-language a:first').tab('show');
-//--></script></div>
+//--></script>
+
+<script type="text/javascript">
+
+  var adress_row = <?php echo $adress_row; ?>;
+  
+  function addAdress(language_id) {
+    html  = '<div class="adress_content">';
+    html += '<div class="form-group">';
+    html += '<label class="col-sm-2 control-label" for="input-adress['+adress_row+']">Адрес</label>';
+    html +='<div class="col-sm-10">';
+    html +='<input type="text" name="address['+language_id+']['+adress_row+'][adress]" value="" placeholder="Адрес магазина" id="input-adress'+adress_row+'" class="form-control" />';
+    html += '</div>';
+    html += '</div>';
+    html += '<div class="form-group">';
+    html += '<label class="col-sm-2 control-label" for="input-short-adress['+language_id+']">Короткий адрес (метро)</label>';
+    html += '<div class="col-sm-10">';
+    html += '<input type="text" name="address['+language_id+']['+adress_row+'][short_address]" value="" placeholder="Краткое обозначение" id="input-short-adress'+adress_row+'" class="form-control" />';
+    html += '</div>';
+    html += '</div>';
+
+    html += '<div class="form-group">';
+    html += '<label class="col-sm-2 control-label" for="input-short-adress<?php echo $adress_row; ?>">Порядок сортировки</label>';
+    html += '<div class="col-sm-2">';
+    html += '<input type="text" name="address['+language_id+']['+adress_row+'][sort_order]" value="" placeholder="Порядок сортировки" id="input-short-adress'+adress_row+'" class="form-control" />';
+    html += '</div>';
+    html += '</div>';
+
+    html += '<button type="button" onclick="$(\'#content-language'+language_id+' .adress_content.adress_row'+adress_row+'\').remove();" data-toggle="tooltip" title="Удалить" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>';
+
+    html += '</div>';
+   
+    $('#content-language' + language_id + ' .adress_content_box').append(html);
+    
+    adress_row++;
+
+  }
+
+</script> 
+
+
+
+
+</div>
+
+<style>
+
+  .form-group + .form-group {
+    border:none;
+  }
+
+  .switch_cities_content .city_magazines {
+    border-top: 1px solid #ededed;
+  }
+  .adress_content_box .btn-danger {
+    color: #fff;
+    background-color: #f56b6b;
+    border-color: #f24545;
+    float: right;
+    margin-top: -40px;
+}
+
+.adress_content {
+    margin-bottom: 40px;
+}
+
+</style>
+
 <?php echo $footer; ?>

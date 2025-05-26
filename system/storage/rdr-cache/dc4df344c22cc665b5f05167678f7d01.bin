@@ -1,0 +1,52 @@
+a:6:{s:4:"name";s:12:"Dream Filter";s:5:"title";a:1:{i:1;s:12:"Фильтр";}s:6:"status";s:1:"1";s:7:"filters";a:6:{i:0;a:8:{s:9:"filter_by";s:10:"attributes";s:4:"type";s:8:"checkbox";s:4:"name";a:1:{i:1;s:12:"Москва";}s:4:"open";s:1:"0";s:7:"item_id";s:2:"12";s:9:"item_name";s:12:"Москва";s:10:"sort_order";s:5:"count";s:3:"add";a:1:{s:7:"divider";s:1:"|";}}i:1;a:8:{s:9:"filter_by";s:10:"attributes";s:4:"type";s:8:"checkbox";s:4:"name";a:1:{i:1;s:29:"Санкт-Петербург";}s:4:"open";s:1:"0";s:7:"item_id";s:2:"15";s:9:"item_name";s:29:"Санкт-Петербург";s:10:"sort_order";s:5:"count";s:3:"add";a:1:{s:7:"divider";s:1:"|";}}i:2;a:8:{s:9:"filter_by";s:10:"attributes";s:4:"type";s:8:"checkbox";s:4:"name";a:1:{i:1;s:12:"Казань";}s:4:"open";s:1:"0";s:7:"item_id";s:2:"16";s:9:"item_name";s:12:"Казань";s:10:"sort_order";s:5:"count";s:3:"add";a:1:{s:7:"divider";s:1:"|";}}i:3;a:8:{s:9:"filter_by";s:10:"attributes";s:4:"type";s:8:"checkbox";s:4:"name";a:1:{i:1;s:31:"Интернет-магазин";}s:4:"open";s:1:"0";s:7:"item_id";s:2:"17";s:9:"item_name";s:31:"Интернет-магазин";s:10:"sort_order";s:5:"count";s:3:"add";a:1:{s:7:"divider";s:1:"|";}}i:4;a:8:{s:9:"filter_by";s:10:"attributes";s:4:"type";s:8:"checkbox";s:4:"name";a:1:{i:1;s:8:"Цвет";}s:4:"open";s:1:"1";s:7:"item_id";s:2:"14";s:9:"item_name";s:8:"Цвет";s:10:"sort_order";s:5:"count";s:3:"add";a:1:{s:7:"divider";s:1:"|";}}i:5;a:7:{s:9:"filter_by";s:7:"options";s:4:"type";s:8:"checkbox";s:4:"name";a:1:{i:1;s:12:"Размер";}s:4:"open";s:1:"1";s:7:"item_id";s:2:"13";s:9:"item_name";s:12:"Размер";s:10:"sort_order";s:7:"default";}}s:8:"settings";a:26:{s:9:"reset_btn";s:1:"1";s:14:"reset_btn_text";a:1:{i:1;s:10:"Сброс";}s:15:"search_btn_text";a:1:{i:1;s:10:"Найти";}s:4:"mode";s:4:"ajax";s:11:"search_mode";s:6:"manual";s:10:"use_popper";s:1:"1";s:10:"min_values";s:1:"1";s:16:"categories_child";s:1:"1";s:8:"selector";s:16:".product_content";s:9:"pushstate";s:1:"1";s:15:"ajax_pagination";s:1:"1";s:19:"pagination_selector";s:11:".pagination";s:11:"ajax_sorter";s:1:"0";s:15:"sorter_selector";s:11:"#input-sort";s:11:"sorter_type";s:6:"select";s:10:"ajax_limit";s:1:"0";s:14:"limit_selector";s:12:"#input-limit";s:10:"limit_type";s:6:"select";s:11:"ajax_scroll";s:1:"0";s:13:"scroll_offset";s:1:"0";s:22:"callback_before_enable";s:1:"1";s:15:"callback_before";s:50:"function(action) {
+    console.log('action ');
+}";s:21:"callback_after_enable";s:1:"1";s:14:"callback_after";s:1519:"function(html) {
+  
+  
+  	if(localStorage.getItem('clickToFilterBtn')){
+       $('.dream-filter').hide();
+      $('section.dream-filter').removeClass('open');
+      localStorage.removeItem('clickToFilterBtn');
+      
+      
+      
+					if($('.panel-collapse:not(.cur_magazine) label input[type=&quot;checkbox&quot;]:checked').length &gt; 0){
+                      
+                      $('.categories_top').addClass('select_box');
+                      
+                      $('.categories_top ').after($('.categories_top_content'));
+
+						setTimeout(function(){
+							$('button.filter_products .clear_filters').remove();
+							console.log('test');
+						
+							$('button.filter_products').append('&lt;span class=&quot;clear_filters&quot;&gt;&lt;img src=&quot;/image/cross.svg&quot; alt=&quot;close button&quot;&gt;&lt;/span&gt;');
+							
+						},100);
+                      
+                      	$('.categories_top .filters_picked').html($('.rdf-picked').html());
+
+					} else {
+                     $('.categories_top').removeClass('select_box'); 
+                      $('.selected_category').after($('.categories_top_content'));
+                    }
+      
+    } 
+  console.log('html ' +  JSON.stringify(html));
+  	_nextPageUrl = getNextPageUrlFromPagination($('ul.pagination'));
+					//console.log(_nextPageUrl);
+				
+					HidePagination();
+				
+					if (_nextPageUrl) {
+						$(window).off('scroll', ScrollHandler).on('scroll', ScrollHandler);
+					}
+  
+
+  
+}";s:9:"module_id";s:2:"32";s:4:"ajax";a:10:{s:6:"enable";b:1;s:8:"selector";s:16:".product_content";s:10:"pagination";s:11:".pagination";s:6:"sorter";b:0;s:11:"sorter_type";s:6:"select";s:5:"limit";b:0;s:10:"limit_type";s:6:"select";s:9:"pushstate";b:1;s:6:"scroll";b:0;s:6:"offset";b:0;}}s:4:"view";a:23:{s:8:"template";s:8:"vertical";s:13:"truncate_mode";s:6:"height";s:13:"truncate_view";s:9:"scrollbar";s:15:"truncate_height";i:150;s:18:"truncate_text_show";a:1:{i:1;s:23:"Показать все";}s:18:"truncate_text_hide";a:1:{i:1;s:12:"Скрыть";}s:17:"truncate_elements";i:4;s:17:"truncate_hrz_mode";s:4:"none";s:17:"truncate_hrz_view";s:9:"scrollbar";s:9:"bootstrap";s:1:"0";s:4:"skin";s:7:"default";s:5:"color";s:7:"default";s:6:"button";s:11:"btn-default";s:6:"loader";s:10:"ball-pulse";s:4:"grid";s:1:"0";s:6:"shadow";s:1:"1";s:11:"show_picked";s:1:"1";s:10:"show_count";s:1:"1";s:12:"disable_null";s:7:"disable";s:6:"mobile";a:9:{s:4:"mode";s:5:"fixed";s:5:"width";i:768;s:11:"button_text";a:1:{i:1;s:910:"&lt;svg width=&quot;22px&quot; height=&quot;22px&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 25 25&quot;&gt;
+  &lt;path d=&quot;M21.47,7.58a0.94,0.94,0,0,0-.83-0.5H18a2.67,2.67,0,0,0-5.26,0H10a2.06,2.06,0,1,0-3.46,0H4.36a0.94,0.94,0,0,0-.78,1.46L9.87,17.9V24.4a0.47,0.47,0,0,0,.66.43L14.84,23a0.47,0.47,0,0,0,.28-0.43V17.9l6.29-9.36A0.94,0.94,0,0,0,21.47,7.58ZM8.29,7.08A1.13,1.13,0,1,1,9.41,6,1.13,1.13,0,0,1,8.29,7.08Zm5.39,0a1.73,1.73,0,0,1,3.34,0H13.68Z&quot;/&gt;
+  &lt;path d=&quot;M13.65,0.13a2.06,2.06,0,1,0,2.06,2.06A2.07,2.07,0,0,0,13.65.13Zm0,3.19a1.13,1.13,0,1,1,1.13-1.13A1.13,1.13,0,0,1,13.65,3.31Z&quot;/&gt;
+  &lt;path d=&quot;M18.72,2.33a0.47,0.47,0,0,0-.47.47V5.46a0.47,0.47,0,1,0,.94,0V2.8a0.47,0.47,0,0,0-.47-0.47h0Z&quot;/&gt;
+  &lt;path d=&quot;M9.95,0.53A0.47,0.47,0,0,0,9.48,1V2.92a0.47,0.47,0,1,0,.94,0V1A0.47,0.47,0,0,0,9.95.53h0Z&quot;/&gt;
+&lt;/svg&gt;";}s:9:"autoclose";b:0;s:8:"backdrop";b:0;s:4:"side";s:4:"left";s:13:"indenting_top";i:50;s:16:"indenting_bottom";i:10;s:16:"indenting_button";i:25;}s:11:"image_width";s:2:"30";s:12:"image_height";s:2:"30";s:8:"truncate";a:5:{s:4:"mode";s:6:"height";s:4:"view";s:9:"scrollbar";s:9:"scrollbar";b:1;s:6:"height";s:5:"150px";s:8:"elements";b:0;}}}

@@ -1,0 +1,113 @@
+.in_cart_content {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.in_cart_image {
+    margin-right: 15px;
+}
+
+.success_in_cart {
+    position: relative;
+    display: flex
+;
+    width: 100%;
+    padding: 16px 20px;
+    background-color: #fff;
+    color: #676560;
+    cursor: pointer;
+    animation: ToastBase_fade-in__Un_c_ .3s ease, ToastBase_slide-in__wlir7 .3s ease, ToastBase_fade-out__vOXwn .3s ease 3s forwards;
+    justify-content: space-between;
+}
+
+.cart_icon {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart_icon img {
+    max-width: 16px;
+}
+
+.cart_icon span {
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #676560;
+    transform: translateX(1px);
+    margin-top: 2px;
+}
+
+.in_cart_product_info .desc {
+    font-weight: 700;
+    font-size: 8px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    color: #d1d0cd;
+}
+
+.in_cart_product_info .title {
+    font-family: __tStar_4eebf3, __tStar_Fallback_4eebf3, sans-serif;
+    font-size: 10px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.success_in_cart {
+    position: relative;
+    display: flex
+;
+    width: 100%;
+    padding: 16px 20px;
+    background-color: #fff;
+    color: #676560;
+    cursor: pointer;
+    animation: ToastBase_fade-in__Un_c_ .3s ease, ToastBase_slide-in__wlir7 .3s ease, ToastBase_fade-out__vOXwn .3s ease 3s forwards;
+}
+
+.success_wrapper_note {
+    position: fixed;
+    top: 8px;
+    right: 0;
+    left: 0;
+    z-index: 1001;
+    display: flex
+;
+    flex-direction: column-reverse;
+    gap: 8px;
+    padding: 0 max(8px, (100% - 700px) / 2 + 8px);
+    opacity: 0;
+    top: 20px;
+}
+
+.success_in_cart .in_cart_image img {
+    object-fit: contain;
+    overflow: hidden;
+    width: 50px;
+    min-width: 50px;
+    height: 50px;
+    padding: 8px;
+    background-color: #e9e7e4;
+}
+
+.wish_active {
+    display: none;
+}
+
+a.wishlist_product_btn.open .wish_active {
+    display: block;
+}
+a.wishlist_product_btn.open .wish_noactive {
+    display: none;
+}

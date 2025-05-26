@@ -1,0 +1,62 @@
+.cart_btn span {
+    font-weight: 700;
+    font-size: 8px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    position: absolute;
+    bottom: 16px;
+    color: #676560;
+    letter-spacing: normal;
+    display: block;
+    /* translate: 50%; */
+    text-align: center;
+    /* left: 1px; */
+    /* transform: translate(-50%); */
+    width: 16px;
+    margin-left: 0px;
+}
+
+
+
+.cart_btn {
+    padding: 20px 8px 30px;
+    position: relative;
+    top: -1px;
+    cursor: pointer;
+    display:none;
+}
+
+.cart_btn.open {
+    display:block;
+}
+
+
+.wish_btn {
+    display: none;
+    padding: 20px 8px 30px;
+    position: relative;
+    top: -1px;
+    cursor: pointer;
+}
+
+.wish_btn.open {
+    display: block;
+} 
+
+.wish_btn span {
+    font-weight: 700;
+    font-size: 8px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    position: absolute;
+    bottom: 16px;
+    color: #676560;
+    letter-spacing: normal;
+    display: block;
+    /* translate: 50%; */
+    text-align: center;
+    /* left: 1px; */
+    /* transform: translate(-50%); */
+    width: 16px;
+    margin-left: 0px;
+}

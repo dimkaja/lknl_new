@@ -1,0 +1,311 @@
+.header_item.logo h1 {
+    font-weight: 900;
+    font-size: 12px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    color: #676560;
+    font-family: '__tStar_Fallback_4eebf3', sans-serif;
+    text-align: center;
+}
+
+.header_item.logo p.р1_subtitle {
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    color: #9e9b99;
+    white-space: nowrap;
+    max-width: 225px;
+    white-space: initial;
+    text-align: center;
+}
+
+.header_item.logo.auth {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    padding-top: 27px;
+    transform: translateX(-50%);
+    margin-left: 0;
+}
+
+body.checkout-auth button.back_to_page {
+    padding: 30px 20px;
+}
+
+.page_1 {
+    display: block;
+}
+.page_2 {
+    display: none;
+}
+
+.auth_wrapper {
+    padding: 0px calc((100% - 700px) / 2);
+    top: 80px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    background-color: #eeedea;
+    height: calc(100vh - 80px);
+}
+
+.auth_wrapper_content {
+    display: flex
+;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    padding: 0px 24px 0px;
+    transition: all .3s ease-out;
+}
+
+select.select_numberformat {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+    letter-spacing: -.078px;
+    height: auto;
+    padding: 0 8px 0 0;
+    border: 0;
+    border-right: 1px solid #676560;
+    border-radius: 0;
+    background-color: transparent;
+    color: #676560;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+}
+
+.auth_content_box {
+    display: flex
+;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100% - 74px);
+    padding: 32px 24px 38px;
+    transition: all .3s ease-out;
+}
+
+.auth_agree {
+    font-weight: 700;
+    font-size: 8px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    display: flex
+;
+    align-items: center;
+    margin-top: 16px;
+    color: #676560;
+    line-height: 9.6px;
+    text-align: left;
+}
+
+.auth_agree_content {
+    display: flex
+;
+    justify-content: center;
+    align-items: center;
+    min-width: 24px;
+    height: 24px;
+    margin-right: 16px;
+    border-radius: 50%;
+    background-color: #676560;
+}
+
+.auth_input_phone {
+    display: flex
+;
+    height: 60px;
+    padding: 16px;
+    border: 1px solid #eeedea;
+    border-radius: 30px;
+    position: relative;
+}
+
+.auth_input_phone input.input_telephone_auth.error {
+    color: #b24d53;
+}
+
+.auth_input_phone input.input_telephone_auth[disabled], select.select_numberformat[disabled] {
+    opacity: 0.5;
+}
+
+.auth_input_phone input.input_telephone_auth + .input_clear {
+    display: none;
+}
+.auth_input_phone input.input_telephone_auth:focus + .input_clear {
+    display: block;
+}
+
+.auth_agree p a {
+    text-decoration: underline;
+}
+.auth_input_phone input.input_telephone_auth {
+    width: 100%;
+    margin-left: 16px;
+    color: #676560;
+    caret-color: #007aff;
+}
+
+.text_telephone_numbers {
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    margin-bottom: 65px;
+    color: #bdbcba;
+    text-align: center;
+}
+
+.text_telephone_numbers p {
+    margin: 0 auto;
+    margin-bottom: 8px;
+    text-align: center;
+    width: 100%;
+}
+
+.page_2 .auth_agree_content {
+
+    flex-wrap: wrap;
+}
+
+.auth_wrapper.page_2 .auth_agree_content {
+    background: none;
+    margin-right: 0;
+}
+
+.page_2 .text_telephone_numbers p span {
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    margin-left: 8px;
+    color: #676560;
+}
+
+.cur_telephone_info {
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    margin-bottom: auto;
+    color: #9e9b99;
+    text-align: center;
+}
+
+.input_pincode {
+    display: flex !important
+;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 32px;
+    color: #676560;
+    width: 100%;
+}
+
+input.inputnum {
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    width: 60px;
+    height: 60px;
+    border-bottom: 1px solid #9e9b99;
+    background-color: #eeedea;
+    color: inherit;
+    font-size: 20px;
+    text-align: center;
+    transition: all .3s ease-out;
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+.success_in_cart .desc {
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    margin-bottom: auto;
+    color: #9e9b99;
+    text-align: center;
+    width: 100%;
+    text-align: left;
+}
+
+.success_in_cart p.phone_number {
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    margin-bottom: auto;
+    color: #9e9b99;
+    text-align: center;
+    width: 100%;
+    text-align: left;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    margin-left: 0;
+    color: #676560;
+}
+
+.recall_content .recall_content_item {
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom: 8px;
+    text-align: center;
+    width: 100%;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    margin-bottom: auto;
+    /* color: #9e9b99; */
+    text-align: center;
+    cursor: pointer;
+}
+
+.checkout-auth .success_in_cart p.title {
+    font-family: __tStar_Fallback_4eebf3, sans-serif;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    margin-bottom: auto;
+    text-align: center;
+    width: 100%;
+    text-align: left;
+}
+
+.checkout-auth svg.input_clear {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -6px;
+    cursor: pointer;
+}
+
+.repeat_call {
+    text-align: center;
+}
+
+.repeat_call button p {
+    font-size: 10px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    font-weight: 900;
+    color: #676560;
+}
+
+.repeat_callback_btn {
+    font-size: 10px;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+    font-weight: 900;
+    color: #676560;
+}

@@ -1,0 +1,14 @@
+button.filter_products{font-weight:900;font-size:10px;letter-spacing:2.3px;text-transform:uppercase;position:fixed;bottom:16px;left:50%;z-index:2;display:flex;align-items:center;height:50px;padding:0
+32px;border:1px
+solid #d1d0cd;background:#fff;color:#676560;transform:translateX(-50%);font-family:'__tStar_4eebf3','__tStar_Fallback_4eebf3',sans-serif;font-family:'__tStar_Fallback_4eebf3',sans-serif;cursor:pointer}section.dream-filter{display:none;padding:0
+calc((100% - 700px) / 2);top:0;right:0;bottom:0;left:0;position:fixed;z-index:3;flex-direction:column;background-color:#eeedea}section.dream-filter.open{display:flex}.top_filter_content{font-weight:500;font-size:15px;line-height:18px;letter-spacing:-.078px;position:-webkit-sticky;position:sticky;top:0;z-index:1;width:100%;background-color:#eeedea;color:#676560;position:relative;display:flex;justify-content:flex-end;align-items:center}.top_filter_content
+button.close_filter{padding:21px
+20px;border:none;background:none;cursor:pointer}.magazines_select{display:flex;align-items:center;font-weight:700;font-size:12px;letter-spacing:2.3px;text-transform:uppercase;position:relative;z-index:2;display:flex;align-items:center;margin-bottom:16px;color:#1d1d1d}.magazines_select
+.cities{display:flex;justify-content:flex-start;align-items:center}.magazines_select .cities
+ul{position:absolute;top:100%;left:0;overflow:hidden;max-height:0;transition:max-height .3s ease-in-out;max-height:250px}.magazines_select .cities ul
+li{padding:16px
+40px 16px 24px;border:1px
+solid #d1d0cd;background-color:#eeedea;color:#676560;white-space:nowrap;cursor:pointer;border-bottom:none}.magazines_select .cities ul li:last-child{border-bottom:1px solid #d1d0cd}.magazines_select .cities
+.city_selected{padding:16px}.dream-filter .panel-heading{display:none}.dream-filter .panel-collapse.collapse:not(.in){display:none}.dream-filter .panel-collapse.collapse.show{display:block}.dream-filter .city_select ul
+li.checked{background:url(/image/check.svg) no-repeat right 16px center;background-color:#eeedea}.dream-filter .popper>span{display:none}.dream-filter>.rdf-form .rdf-footer{display:none}.dream-filter
+.popper{position:static !important;width:100%;background:none;box-shadow:none;border:none;opacity:1 !important;display:block !important}

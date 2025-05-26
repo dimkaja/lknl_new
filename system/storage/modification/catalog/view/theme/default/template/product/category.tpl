@@ -1,140 +1,96 @@
 <?php echo $header; ?>
-<div class="container">
-  <ul class="breadcrumb">
-    <?php foreach ($breadcrumbs as $breadcrumb) { ?>
-    <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
-    <?php } ?>
-  </ul>
-  <div class="row"><?php echo $column_left; ?>
-    <?php if ($column_left && $column_right) { ?>
-    <?php $class = 'col-sm-6'; ?>
-    <?php } elseif ($column_left || $column_right) { ?>
-    <?php $class = 'col-sm-9'; ?>
-    <?php } else { ?>
-    <?php $class = 'col-sm-12'; ?>
-    <?php } ?>
-    <div id="content" class="<?php echo $class; ?>"><?php echo $content_top; ?>
+
+
+<link href="/catalog/view/theme/default/stylesheet/category_page.css?v=<?php echo rand(1,679486783567); ?>" rel="stylesheet" />
+<link href="/catalog/view/theme/default/stylesheet/filter.css?v=<?php echo rand(1,679486783567); ?>" rel="stylesheet" />
+<div class="product_content_wrapper">
+
+  <div class="product_content_box">
+ 
+    <div id="content" ><?php echo $content_top; ?>
       <h1><?php echo $heading_title; ?></h1>
-      <?php if ($thumb || $description) { ?>
-      <div class="row">
-        <?php if ($thumb) { ?>
-        <div class="col-sm-2"><img src="<?php echo $thumb; ?>" alt="<?php echo $heading_title; ?>" title="<?php echo $heading_title; ?>" class="img-thumbnail" /></div>
-        <?php } ?>
-        <?php if ($description) { ?>
-        <div class="col-sm-10"><?php echo $description; ?></div>
-        <?php } ?>
-      </div>
-      <hr>
-      <?php } ?>
-      <?php if ($categories) { ?>
-      <h3><?php echo $text_refine; ?></h3>
-      <?php if (count($categories) <= 5) { ?>
-      <div class="row">
-        <div class="col-sm-3">
-          <ul>
-            <?php foreach ($categories as $category) { ?>
-            <li><a href="<?php echo $category['href']; ?>"><?php echo $category['name']; ?></a></li>
-            <?php } ?>
-          </ul>
+
+      <?php if ($top_categories) { ?>
+  
+
+        <div class="categories_top">
+          <div class="selected_category"><?php echo $current_category['name']; ?></div>
+
+
+
+
+          <?php if(count($top_categories) > 1) { ?>
+            <div class="categories_top_content">
+           
+
+              <?php foreach ($top_categories as $category) { ?>
+                <?php if($current_category['category_id'] == $category['category_id']) { ?>
+                  <div data-value="<?php echo $category['category_id']; ?>" class="category_item checked"><a href="<?php echo $category['href']; ?>"><?php echo $category['name']; ?></a></div>
+                <?php } else { ?>
+                  <div data-value="<?php echo $category['category_id']; ?>" class="category_item"><a href="<?php echo $category['href']; ?>"><?php echo $category['name']; ?></a></div>
+                <?php } ?>
+               
+                <?php } ?>
+            </div>
+          <?php } ?>
+        
+            <div class="filters_picked"></div>
         </div>
-      </div>
-      <?php } else { ?>
-      <div class="row">
-        <?php foreach (array_chunk($categories, ceil(count($categories) / 4)) as $categories) { ?>
-        <div class="col-sm-3">
-          <ul>
-            <?php foreach ($categories as $category) { ?>
-            <li><a href="<?php echo $category['href']; ?>"><?php echo $category['name']; ?></a></li>
-            <?php } ?>
-          </ul>
-        </div>
-        <?php } ?>
-      </div>
-      <?php } ?>
+
       <?php } ?>
       <?php if ($products) { ?>
-      <div class="row">
-        <div class="col-md-2 col-sm-6 hidden-xs">
-          <div class="btn-group btn-group-sm">
-            <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" title="<?php echo $button_list; ?>"><i class="fa fa-th-list"></i></button>
-            <button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" title="<?php echo $button_grid; ?>"><i class="fa fa-th"></i></button>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="form-group">
-            <a href="<?php echo $compare; ?>" id="compare-total" class="btn btn-link"><?php echo $text_compare; ?></a>
-          </div>
-        </div>
-        <div class="col-md-4 col-xs-6">
-          <div class="form-group input-group input-group-sm">
-            <label class="input-group-addon" for="input-sort"><?php echo $text_sort; ?></label>
-            <select id="input-sort" class="form-control" onchange="location = this.value;">
-              <?php foreach ($sorts as $sorts) { ?>
-              <?php if ($sorts['value'] == $sort . '-' . $order) { ?>
-              <option value="<?php echo $sorts['href']; ?>" selected="selected"><?php echo $sorts['text']; ?></option>
-              <?php } else { ?>
-              <option value="<?php echo $sorts['href']; ?>"><?php echo $sorts['text']; ?></option>
-              <?php } ?>
-              <?php } ?>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-3 col-xs-6">
-          <div class="form-group input-group input-group-sm">
-            <label class="input-group-addon" for="input-limit"><?php echo $text_limit; ?></label>
-            <select id="input-limit" class="form-control" onchange="location = this.value;">
-              <?php foreach ($limits as $limits) { ?>
-              <?php if ($limits['value'] == $limit) { ?>
-              <option value="<?php echo $limits['href']; ?>" selected="selected"><?php echo $limits['text']; ?></option>
-              <?php } else { ?>
-              <option value="<?php echo $limits['href']; ?>"><?php echo $limits['text']; ?></option>
-              <?php } ?>
-              <?php } ?>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="row">
+      
+      <div class="product_content">
         <?php foreach ($products as $product) { ?>
-        <div class="product-layout product-list col-xs-12">
-          <div class="product-thumb">
-            <div class="image"><a href="<?php echo $product['href']; ?>"><img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>" title="<?php echo $product['name']; ?>" class="img-responsive" /></a></div>
-            <div>
-              <div class="caption">
-                <h4><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></h4>
-                <p><?php echo $product['description']; ?></p>
-                <?php if ($product['price']) { ?>
-                <p class="price">
-                  <?php if (!$product['special']) { ?>
-                  <?php echo $product['price']; ?>
-                  <?php } else { ?>
-                  <span class="price-new"><?php echo $product['special']; ?></span> <span class="price-old"><?php echo $product['price']; ?></span>
-                  <?php } ?>
-                  <?php if ($product['tax']) { ?>
-                  <span class="price-tax"><?php echo $text_tax; ?> <?php echo $product['tax']; ?></span>
-                  <?php } ?>
-                </p>
-                <?php } ?>
-                <?php if ($product['rating']) { ?>
-                <div class="rating">
-                  <?php for ($i = 1; $i <= 5; $i++) { ?>
-                  <?php if ($product['rating'] < $i) { ?>
-                  <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
-                  <?php } else { ?>
-                  <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
-                  <?php } ?>
-                  <?php } ?>
-                </div>
-                <?php } ?>
+          <div class="product_item">
+            <div class="product_images">
+              <a href="<?php echo $product['href']; ?>">
+                <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>" />
+              </a>
+              <a href="<?php echo $product['href']; ?>">
+                <img src="<?php echo $product['prev_image']; ?>" alt="<?php echo $product['name']; ?>" />
+              </a>
+            </div>
+            <div class="product_bottom_params">
+              <div class="product_prices">
+                <div class="product_name"><?php echo $product['name']; ?></div>
+                <?php if($product['special']) { ?>
+                  <div class="price"><?php echo $product['special']; ?></div>
+                <?php } else { ?>
+                  <div class="price"><?php echo $product['price']; ?></div>
+                 <?php } ?>
               </div>
-              <div class="button-group">
-                <button type="button" onclick="cart.add('<?php echo $product['product_id']; ?>', '<?php echo $product['minimum']; ?>');"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md"><?php echo $button_cart; ?></span></button>
-                <button type="button" data-toggle="tooltip" title="<?php echo $button_wishlist; ?>" onclick="wishlist.add('<?php echo $product['product_id']; ?>');"><i class="fa fa-heart"></i></button>
-                <button type="button" data-toggle="tooltip" title="<?php echo $button_compare; ?>" onclick="compare.add('<?php echo $product['product_id']; ?>');"><i class="fa fa-exchange"></i></button>
+              <div class="wishlist_content">
+
+                <?php if($product['in_wish']) { ?>
+                  <?php $wish_status = 'open'; ?>
+                  <a class="wishlist_product_btn <?php echo $wish_status; ?>" data-product="<?php echo $product['product_id']; ?>" onclick="wishlist.remove('<?php echo $product['product_id']; ?>');return false;" href="#" >
+                <?php } else { ?>
+                  <?php $wish_status = ''; ?>
+                  <a class="wishlist_product_btn <?php echo $wish_status; ?>" data-product="<?php echo $product['product_id']; ?>" onclick="wishlist.add('<?php echo $product['product_id']; ?>');return false;" href="#" >
+                <?php } ?>
+
+              
+                  <svg class="wish_noactive" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <g clip-path="url(#clip0_33263_25458)"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.73889 1.23062C3.63983 1.23062 3.30411 1.23062 3.30411 1.23062C3.30411 1.23062 3.30411 1.57594 3.30411 1.71979V13.4074L7.99955 9.846L12.6956 13.4076V1.71996C12.6956 1.57612 12.6956 1.2308 12.6956 1.2308C12.6956 1.2308 12.3599 1.2308 12.2608 1.2308L3.73889 1.23062ZM2 0C2 0 3.2614 -0.000176013 3.73889 -0.000176013L12.2608 0C12.7383 0 14 0.000612825 14 0.000612825C14 0.000612825 14 1.27791 14 1.71996V16L7.99998 11.4609L2.00052 15.9998L1.99976 1.71979C1.99976 1.27774 2 0 2 0Z" fill="#676560"></path>
+                    </g><defs><clipPath id="clip0_33263_25458"><rect width="16" height="16" fill="white"></rect></clipPath></defs>
+                  </svg>
+
+                  <svg class="wish_active" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_33263_39327)">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C2 0 3.2614 -0.000176013 3.73889 -0.000176013L12.2608 0C12.7383 0 14 0.000612825 14 0.000612825C14 0.000612825 14 1.27791 14 1.71996V16L7.99998 11.4609L2.00052 15.9998L1.99976 1.71979C1.99976 1.27774 2 0 2 0Z" fill="#676560"></path>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_33263_39327">
+                        <rect width="16" height="16" fill="white"></rect>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </a>
               </div>
             </div>
+   
           </div>
-        </div>
         <?php } ?>
       </div>
       <div class="row">
@@ -151,5 +107,8 @@
       <?php echo $content_bottom; ?></div>
     <?php echo $column_right; ?></div>
 </div>
+
+<button class="filter_products">ФИЛЬТР</button>
+
 <script src="catalog/view/javascript/scrollHandler.js"></script>
 <?php echo $footer; ?>

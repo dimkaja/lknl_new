@@ -1,12 +1,13 @@
 <?php
 class ModelCatalogProduct extends Model {
 	public function addProduct($data) {
-		$this->db->query("INSERT INTO " . DB_PREFIX . "product SET model = '" . $this->db->escape($data['model']) . "', sku = '" . $this->db->escape($data['sku']) . "', upc = '" . $this->db->escape($data['upc']) . "', ean = '" . $this->db->escape($data['ean']) . "', jan = '" . $this->db->escape($data['jan']) . "', isbn = '" . $this->db->escape($data['isbn']) . "', mpn = '" . $this->db->escape($data['mpn']) . "', location = '" . $this->db->escape($data['location']) . "', quantity = '" . (int)$data['quantity'] . "', minimum = '" . (int)$data['minimum'] . "', subtract = '" . (int)$data['subtract'] . "', stock_status_id = '" . (int)$data['stock_status_id'] . "', date_available = '" . $this->db->escape($data['date_available']) . "', manufacturer_id = '" . (int)$data['manufacturer_id'] . "', shipping = '" . (int)$data['shipping'] . "', price = '" . (float)$data['price'] . "', points = '" . (int)$data['points'] . "', weight = '" . (float)$data['weight'] . "', weight_class_id = '" . (int)$data['weight_class_id'] . "', length = '" . (float)$data['length'] . "', width = '" . (float)$data['width'] . "', height = '" . (float)$data['height'] . "', length_class_id = '" . (int)$data['length_class_id'] . "', status = '" . (int)$data['status'] . "', tax_class_id = '" . (int)$data['tax_class_id'] . "', sort_order = '" . (int)$data['sort_order'] . "', date_added = NOW()");
+		
+           	$this->db->query("INSERT INTO " . DB_PREFIX . "product SET colorasprod = '" . $this->db->escape($data['colorasprod']) . "', htmlcolor = '" . $this->db->escape($data['htmlcolor']) . "',  model = '" . $this->db->escape($data['model']) . "', sizes_id = '" . (int)$data['sizes_id'] . "', sku = '" . $this->db->escape($data['sku']) . "', upc = '" . $this->db->escape($data['upc']) . "', ean = '" . $this->db->escape($data['ean']) . "', jan = '" . $this->db->escape($data['jan']) . "', isbn = '" . $this->db->escape($data['isbn']) . "', mpn = '" . $this->db->escape($data['mpn']) . "', location = '" . $this->db->escape($data['location']) . "', quantity = '" . (int)$data['quantity'] . "', minimum = '" . (int)$data['minimum'] . "', subtract = '" . (int)$data['subtract'] . "', stock_status_id = '" . (int)$data['stock_status_id'] . "', date_available = '" . $this->db->escape($data['date_available']) . "', manufacturer_id = '" . (int)$data['manufacturer_id'] . "', shipping = '" . (int)$data['shipping'] . "', price = '" . (float)$data['price'] . "', points = '" . (int)$data['points'] . "', weight = '" . (float)$data['weight'] . "', weight_class_id = '" . (int)$data['weight_class_id'] . "', length = '" . (float)$data['length'] . "', width = '" . (float)$data['width'] . "', height = '" . (float)$data['height'] . "', length_class_id = '" . (int)$data['length_class_id'] . "', status = '" . (int)$data['status'] . "', tax_class_id = '" . (int)$data['tax_class_id'] . "', sort_order = '" . (int)$data['sort_order'] . "', date_added = NOW()");
 
 		$product_id = $this->db->getLastId();
 
 		if (isset($data['image'])) {
-			$this->db->query("UPDATE " . DB_PREFIX . "product SET image = '" . $this->db->escape($data['image']) . "' WHERE product_id = '" . (int)$product_id . "'");
+			$this->db->query("UPDATE " . DB_PREFIX . "product SET colorasprod = '" . $this->db->escape($data['colorasprod']) . "', htmlcolor = '" . $this->db->escape($data['htmlcolor']) . "',  image = '" . $this->db->escape($data['image']) . "' WHERE product_id = '" . (int)$product_id . "'");
 		}
 
 		foreach ($data['product_description'] as $language_id => $value) {
@@ -104,6 +105,35 @@ class ModelCatalogProduct extends Model {
 			}
 		}
 
+       	// цвет	
+		$this->db->query("DELETE FROM " . DB_PREFIX . "product_color WHERE product_id = '" . (int)$product_id . "'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "product_color WHERE color = '" . (int)$product_id . "'");
+
+		if (isset($data['product_color'])) {
+			foreach ($data['product_color'] as $related_id) {
+				$this->db->query("DELETE FROM " . DB_PREFIX . "product_color WHERE product_id = '" . (int)$product_id . "' AND color = '" . (int)$related_id . "'");
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_color SET product_id = '" . (int)$product_id . "', color = '" . (int)$related_id . "'");
+				$this->db->query("DELETE FROM " . DB_PREFIX . "product_color WHERE product_id = '" . (int)$related_id . "' AND color = '" . (int)$product_id . "'");
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_color SET product_id = '" . (int)$related_id . "', color = '" . (int)$product_id . "'");
+			}
+		}
+		
+		
+            
+
+         	// Цвет	
+		if (isset($data['product_color'])) {
+			foreach ($data['product_color'] as $related_id) {
+				$this->db->query("DELETE FROM " . DB_PREFIX . "product_color WHERE product_id = '" . (int)$product_id . "' AND color = '" . (int)$related_id . "'");
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_color SET product_id = '" . (int)$product_id . "', color = '" . (int)$related_id . "'");
+				$this->db->query("DELETE FROM " . DB_PREFIX . "product_color WHERE product_id = '" . (int)$related_id . "' AND color = '" . (int)$product_id . "'");
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_color SET product_id = '" . (int)$related_id . "', color = '" . (int)$product_id . "'");
+			}
+		}
+		
+		
+            
+
 		if (isset($data['product_reward'])) {
 			foreach ($data['product_reward'] as $customer_group_id => $product_reward) {
 				if ((int)$product_reward['points'] > 0) {
@@ -140,10 +170,10 @@ class ModelCatalogProduct extends Model {
 	}
 
 	public function editProduct($product_id, $data) {
-		$this->db->query("UPDATE " . DB_PREFIX . "product SET model = '" . $this->db->escape($data['model']) . "', sku = '" . $this->db->escape($data['sku']) . "', upc = '" . $this->db->escape($data['upc']) . "', ean = '" . $this->db->escape($data['ean']) . "', jan = '" . $this->db->escape($data['jan']) . "', isbn = '" . $this->db->escape($data['isbn']) . "', mpn = '" . $this->db->escape($data['mpn']) . "', location = '" . $this->db->escape($data['location']) . "', quantity = '" . (int)$data['quantity'] . "', minimum = '" . (int)$data['minimum'] . "', subtract = '" . (int)$data['subtract'] . "', stock_status_id = '" . (int)$data['stock_status_id'] . "', date_available = '" . $this->db->escape($data['date_available']) . "', manufacturer_id = '" . (int)$data['manufacturer_id'] . "', shipping = '" . (int)$data['shipping'] . "', price = '" . (float)$data['price'] . "', points = '" . (int)$data['points'] . "', weight = '" . (float)$data['weight'] . "', weight_class_id = '" . (int)$data['weight_class_id'] . "', length = '" . (float)$data['length'] . "', width = '" . (float)$data['width'] . "', height = '" . (float)$data['height'] . "', length_class_id = '" . (int)$data['length_class_id'] . "', status = '" . (int)$data['status'] . "', tax_class_id = '" . (int)$data['tax_class_id'] . "', sort_order = '" . (int)$data['sort_order'] . "', date_modified = NOW() WHERE product_id = '" . (int)$product_id . "'");
+		$this->db->query("UPDATE " . DB_PREFIX . "product SET colorasprod = '" . $this->db->escape($data['colorasprod']) . "', htmlcolor = '" . $this->db->escape($data['htmlcolor']) . "',  model = '" . $this->db->escape($data['model']) . "', sizes_id = '" . (int)$data['sizes_id'] . "', sku = '" . $this->db->escape($data['sku']) . "', upc = '" . $this->db->escape($data['upc']) . "', ean = '" . $this->db->escape($data['ean']) . "', jan = '" . $this->db->escape($data['jan']) . "', isbn = '" . $this->db->escape($data['isbn']) . "', mpn = '" . $this->db->escape($data['mpn']) . "', location = '" . $this->db->escape($data['location']) . "', quantity = '" . (int)$data['quantity'] . "', minimum = '" . (int)$data['minimum'] . "', subtract = '" . (int)$data['subtract'] . "', stock_status_id = '" . (int)$data['stock_status_id'] . "', date_available = '" . $this->db->escape($data['date_available']) . "', manufacturer_id = '" . (int)$data['manufacturer_id'] . "', shipping = '" . (int)$data['shipping'] . "', price = '" . (float)$data['price'] . "', points = '" . (int)$data['points'] . "', weight = '" . (float)$data['weight'] . "', weight_class_id = '" . (int)$data['weight_class_id'] . "', length = '" . (float)$data['length'] . "', width = '" . (float)$data['width'] . "', height = '" . (float)$data['height'] . "', length_class_id = '" . (int)$data['length_class_id'] . "', status = '" . (int)$data['status'] . "', tax_class_id = '" . (int)$data['tax_class_id'] . "', sort_order = '" . (int)$data['sort_order'] . "', date_modified = NOW() WHERE product_id = '" . (int)$product_id . "'");
 
 		if (isset($data['image'])) {
-			$this->db->query("UPDATE " . DB_PREFIX . "product SET image = '" . $this->db->escape($data['image']) . "' WHERE product_id = '" . (int)$product_id . "'");
+			$this->db->query("UPDATE " . DB_PREFIX . "product SET colorasprod = '" . $this->db->escape($data['colorasprod']) . "', htmlcolor = '" . $this->db->escape($data['htmlcolor']) . "',  image = '" . $this->db->escape($data['image']) . "' WHERE product_id = '" . (int)$product_id . "'");
 		}
 
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_description WHERE product_id = '" . (int)$product_id . "'");
@@ -263,6 +293,35 @@ class ModelCatalogProduct extends Model {
 			}
 		}
 
+       	// цвет	
+		$this->db->query("DELETE FROM " . DB_PREFIX . "product_color WHERE product_id = '" . (int)$product_id . "'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "product_color WHERE color = '" . (int)$product_id . "'");
+
+		if (isset($data['product_color'])) {
+			foreach ($data['product_color'] as $related_id) {
+				$this->db->query("DELETE FROM " . DB_PREFIX . "product_color WHERE product_id = '" . (int)$product_id . "' AND color = '" . (int)$related_id . "'");
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_color SET product_id = '" . (int)$product_id . "', color = '" . (int)$related_id . "'");
+				$this->db->query("DELETE FROM " . DB_PREFIX . "product_color WHERE product_id = '" . (int)$related_id . "' AND color = '" . (int)$product_id . "'");
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_color SET product_id = '" . (int)$related_id . "', color = '" . (int)$product_id . "'");
+			}
+		}
+		
+		
+            
+
+         	// Цвет	
+		if (isset($data['product_color'])) {
+			foreach ($data['product_color'] as $related_id) {
+				$this->db->query("DELETE FROM " . DB_PREFIX . "product_color WHERE product_id = '" . (int)$product_id . "' AND color = '" . (int)$related_id . "'");
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_color SET product_id = '" . (int)$product_id . "', color = '" . (int)$related_id . "'");
+				$this->db->query("DELETE FROM " . DB_PREFIX . "product_color WHERE product_id = '" . (int)$related_id . "' AND color = '" . (int)$product_id . "'");
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_color SET product_id = '" . (int)$related_id . "', color = '" . (int)$product_id . "'");
+			}
+		}
+		
+		
+            
+
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_reward WHERE product_id = '" . (int)$product_id . "'");
 
 		if (isset($data['product_reward'])) {
@@ -324,6 +383,7 @@ class ModelCatalogProduct extends Model {
 			$data['product_option'] = $this->getProductOptions($product_id);
 			$data['product_related'] = $this->getProductRelated($product_id);
 			$data['product_reward'] = $this->getProductRewards($product_id);
+$data['product_color'] = $this->getProductColor($product_id);
 			$data['product_special'] = $this->getProductSpecials($product_id);
 			$data['product_category'] = $this->getProductCategories($product_id);
 			$data['product_download'] = $this->getProductDownloads($product_id);
@@ -460,7 +520,7 @@ class ModelCatalogProduct extends Model {
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON (p.product_id = p2c.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p2c.category_id = '" . (int)$category_id . "' ORDER BY pd.name ASC");
 
 		return $query->rows;
-	}
+	} 
 
 	public function getProductDescriptions($product_id) {
 		$product_description_data = array();
@@ -657,6 +717,22 @@ class ModelCatalogProduct extends Model {
 
 		return $product_related_data;
 	}
+
+           	
+	// Цвет
+	public function getProductColor($product_id) {
+		$product_color_data = array();
+
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_color WHERE product_id = '" . (int)$product_id . "'");
+
+		foreach ($query->rows as $result) {
+			$product_color_data[] = $result['color'];
+		}
+
+		return $product_color_data;
+	}
+	 
+            
 
 	public function getRecurrings($product_id) {
 		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "product_recurring` WHERE product_id = '" . (int)$product_id . "'");

@@ -1,6 +1,9 @@
 <?php
 class ModelAccountCustomer extends Model {
 	public function addCustomer($data) {
+
+	
+
 		if (isset($data['customer_group_id']) && is_array($this->config->get('config_customer_group_display')) && in_array($data['customer_group_id'], $this->config->get('config_customer_group_display'))) {
 			$customer_group_id = $data['customer_group_id'];
 		} else {
@@ -33,37 +36,12 @@ class ModelAccountCustomer extends Model {
 			$message .= $this->language->get('text_approval') . "\n";
 		}
 
-		$message .= $this->url->link('account/login', '', true) . "\n\n";
-		$message .= $this->language->get('text_services') . "\n\n";
-		$message .= $this->language->get('text_thanks') . "\n";
-		$message .= html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
-
-		$mail = new Mail();
-		$mail->protocol = $this->config->get('config_mail_protocol');
-		$mail->parameter = $this->config->get('config_mail_parameter');
-		$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
-		$mail->smtp_username = $this->config->get('config_mail_smtp_username');
-		$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
-		$mail->smtp_port = $this->config->get('config_mail_smtp_port');
-		$mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
-
-		$mail->setTo($data['email']);
-		$mail->setFrom($this->config->get('config_email'));
-		$mail->setSender(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
-		$mail->setSubject($subject);
-		$mail->setText($message);
-		$mail->send();
-
-		// Send to main admin email if new account email is enabled
-		if (in_array('account', (array)$this->config->get('config_mail_alert'))) {
-			$message  = $this->language->get('text_signup') . "\n\n";
-			$message .= $this->language->get('text_website') . ' ' . html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8') . "\n";
-			$message .= $this->language->get('text_firstname') . ' ' . $data['firstname'] . "\n";
-			$message .= $this->language->get('text_lastname') . ' ' . $data['lastname'] . "\n";
-			$message .= $this->language->get('text_customer_group') . ' ' . $customer_group_info['name'] . "\n";
-			$message .= $this->language->get('text_email') . ' '  .  $data['email'] . "\n";
-			$message .= $this->language->get('text_telephone') . ' ' . $data['telephone'] . "\n";
-
+		if(isset($data['email']) && !empty($data['email'])){
+			$message .= $this->url->link('account/login', '', true) . "\n\n";
+			$message .= $this->language->get('text_services') . "\n\n";
+			$message .= $this->language->get('text_thanks') . "\n";
+			$message .= html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
+	
 			$mail = new Mail();
 			$mail->protocol = $this->config->get('config_mail_protocol');
 			$mail->parameter = $this->config->get('config_mail_parameter');
@@ -72,24 +50,53 @@ class ModelAccountCustomer extends Model {
 			$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
 			$mail->smtp_port = $this->config->get('config_mail_smtp_port');
 			$mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
-
-			$mail->setTo($this->config->get('config_email'));
+	
+			$mail->setTo($data['email']);
 			$mail->setFrom($this->config->get('config_email'));
 			$mail->setSender(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
-			$mail->setSubject(html_entity_decode($this->language->get('text_new_customer'), ENT_QUOTES, 'UTF-8'));
+			$mail->setSubject($subject);
 			$mail->setText($message);
 			$mail->send();
-
-			// Send to additional alert emails if new account email is enabled
-			$emails = explode(',', $this->config->get('config_alert_email'));
-
-			foreach ($emails as $email) {
-				if (utf8_strlen($email) > 0 && preg_match($this->config->get('config_mail_regexp'), $email)) {
-					$mail->setTo($email);
-					$mail->send();
+	
+			// Send to main admin email if new account email is enabled
+			if (in_array('account', (array)$this->config->get('config_mail_alert'))) {
+				$message  = $this->language->get('text_signup') . "\n\n";
+				$message .= $this->language->get('text_website') . ' ' . html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8') . "\n";
+				$message .= $this->language->get('text_firstname') . ' ' . $data['firstname'] . "\n";
+				$message .= $this->language->get('text_lastname') . ' ' . $data['lastname'] . "\n";
+				$message .= $this->language->get('text_customer_group') . ' ' . $customer_group_info['name'] . "\n";
+				$message .= $this->language->get('text_email') . ' '  .  $data['email'] . "\n";
+				$message .= $this->language->get('text_telephone') . ' ' . $data['telephone'] . "\n";
+	
+				$mail = new Mail();
+				$mail->protocol = $this->config->get('config_mail_protocol');
+				$mail->parameter = $this->config->get('config_mail_parameter');
+				$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
+				$mail->smtp_username = $this->config->get('config_mail_smtp_username');
+				$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
+				$mail->smtp_port = $this->config->get('config_mail_smtp_port');
+				$mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
+	
+				$mail->setTo($this->config->get('config_email'));
+				$mail->setFrom($this->config->get('config_email'));
+				$mail->setSender(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
+				$mail->setSubject(html_entity_decode($this->language->get('text_new_customer'), ENT_QUOTES, 'UTF-8'));
+				$mail->setText($message);
+				$mail->send();
+	
+				// Send to additional alert emails if new account email is enabled
+				$emails = explode(',', $this->config->get('config_alert_email'));
+	
+				foreach ($emails as $email) {
+					if (utf8_strlen($email) > 0 && preg_match($this->config->get('config_mail_regexp'), $email)) {
+						$mail->setTo($email);
+						$mail->send();
+					}
 				}
 			}
 		}
+
+	
 
 		return $customer_id;
 	}
@@ -120,6 +127,12 @@ class ModelAccountCustomer extends Model {
 
 	public function getCustomerByEmail($email) {
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE LOWER(email) = '" . $this->db->escape(utf8_strtolower($email)) . "'");
+
+		return $query->row;
+	}
+
+	public function getCustomerByTelephone($telephone) {
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE telephone = '" . $this->db->escape(utf8_strtolower($telephone)) . "'");
 
 		return $query->row;
 	}

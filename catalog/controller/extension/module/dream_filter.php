@@ -32,6 +32,22 @@ class ControllerExtensionModuleDreamFilter extends Controller {
 		//Имя фильтра и настройки отображения
 		$lang_id = (int)$this->config->get('config_language_id');
 		$data['title'] = $setting['title'][$lang_id];
+
+		$this->load->model('catalog/product');
+
+		$data['cities'] = $this->model_catalog_product->getStores();
+
+		if(isset($this->session->data['store'])) {
+			$store_id = $this->session->data['store'];
+		} else {
+			$store_id = 0;
+		}
+
+
+		$data['store_selected'] = $this->model_catalog_category->getStore($store_id);
+
+
+
 		$text = array(
 			'reset_btn_text',
 			'search_btn_text',

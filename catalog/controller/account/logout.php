@@ -1,8 +1,11 @@
 <?php
 class ControllerAccountLogout extends Controller {
 	public function index() {
+
+	
 		if ($this->customer->isLogged()) {
 			$this->customer->logout();
+			$this->response->redirect($this->url->link('common/home', '', true));
 
 			unset($this->session->data['shipping_address']);
 			unset($this->session->data['shipping_method']);

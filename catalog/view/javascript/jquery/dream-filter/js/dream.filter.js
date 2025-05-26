@@ -7,6 +7,7 @@
  */
 (function($) {
     $.fn.dreamFilter = function(options) {
+		
 	    options = $.extend({
 		    search_mode     : 'auto',
 		    disable_null    : 'disable',
@@ -34,13 +35,156 @@
 		    price_btn,
 		    compact_btn;
 
+		
+
+		function get(name){
+		if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+			return decodeURIComponent(name[1]);
+		}
+
+
         //Filter init
         var init = function() {
 	        form.addClass('initialized');
 
 	        if(options.ajax.enable) {
-		        $(options.ajax.selector).prepend(options.loader);
+		        // $(options.ajax.selector).prepend(options.loader);
 		        ajaxInit();
+
+				$('body').append('<p class="cur_url">'+document.location.href+'</p>');
+
+				var cur_url = $('.cur_url').text().trim();
+
+
+				//если признаки применения фильтра не найдены тогда запускаем обработку
+				if(cur_url.indexOf('rdrf') === -1) {
+
+					var citySelected = $('.nav_top_values .cities .city_selected').text().trim();
+
+					$('.magazines_select .cities .city_selected').html(citySelected);
+				
+					var magazines_select = $('.magazines_select .cities .city_selected').text().trim();
+				
+					console.log('magazines_select ' + magazines_select);
+				
+					var curMagazine = magazines_select;
+					$('.magazines_text').removeClass('m_checked');
+					if($('.rdf-filters').length > 0){
+				
+						$('.rdf-filters .panel-group .panel').each(function(){
+							var titleParam = $(this).find('.panel-title').text().trim();
+				
+							if(curMagazine == titleParam){
+								$('.rdf-filters .panel-collapse.collapse:not(.in)').removeClass('show');
+								var optionLength =$(this).find('input[type="checkbox"]').length;
+				
+						
+								$('.magazines_text span').html('('+optionLength+')');
+								$('.magazines_text').addClass('m_checked');
+				
+								$('.rdf-filters .panel-group .panel').find('input[type="checkbox"]').prop('checked',false);
+								$(this).find('input[type="checkbox"]').removeAttr('disabled');
+								$(this).find('input[type="checkbox"]').prop('checked',true);
+				
+									$('#rdrf-form32').submit();
+						
+	
+					
+				
+									$(this).find('.panel-collapse.collapse').addClass('show cur_magazine');
+				
+			
+
+		
+							
+				
+							}
+				
+						});
+				
+					}
+					$('.categories_top').removeClass('select_box');
+				} else {
+
+					
+					$('.product_content').addClass('showed');
+
+					var citySelected = $('.nav_top_values .cities .city_selected').text().trim();
+
+					$('.magazines_select .cities .city_selected').html(citySelected);
+				
+					var magazines_select = $('.magazines_select .cities .city_selected').text().trim();
+				
+					console.log('magazines_select ' + magazines_select);
+				
+					var curMagazine = magazines_select;
+					$('.magazines_text').removeClass('m_checked');
+					if($('.rdf-filters').length > 0){
+				
+						$('.rdf-filters .panel-group .panel').each(function(){
+							var titleParam = $(this).find('.panel-title').text().trim();
+				
+							if(curMagazine == titleParam){
+								$('.rdf-filters .panel-collapse.collapse:not(.in)').removeClass('show');
+								var optionLength =$(this).find('input[type="checkbox"]').length;
+				
+						
+								$('.magazines_text span').html('('+optionLength+')');
+								$('.magazines_text').addClass('m_checked');
+				
+								// $('.rdf-filters .panel-group .panel').find('input[type="checkbox"]').prop('checked',false);
+
+								$(this).find('input[type="checkbox"]').removeAttr('disabled');
+								
+								if($(this).find('input[type="checkbox"]:checked').length == 0){
+									
+									$(this).find('input[type="checkbox"]').prop('checked',true);
+								}
+				
+				
+								$(this).find('.panel-collapse.collapse').addClass('show cur_magazine');
+				
+			
+								
+		
+							
+				
+							}
+				
+						});
+				
+					}
+
+
+
+					if($('.panel-collapse:not(.cur_magazine) label input[type="checkbox"]:checked').length > 0){
+
+						$('.categories_top').addClass('select_box');
+
+						if($('.categories_top_content').length == 0){
+							$('.categories_top').addClass('one_select');
+						}
+
+						$('.categories_top ').after($('.categories_top_content'));
+
+						setTimeout(function(){
+							$('button.filter_products .clear_filters').remove();
+							console.log('test');
+						
+							$('button.filter_products').append('<span class="clear_filters"><img src="/image/cross.svg" alt="close button"></span>');
+							
+						},100);
+						
+						$('.categories_top .filters_picked').html($('.rdf-picked').html());
+					
+					}
+			
+				
+					
+				}
+					
+
+
 	        }
 	        if (options.mobile.mode !== 'none' && window.matchMedia('(max-width: ' + options.mobile.width + 'px)').matches) {
 		        mobileView();
@@ -56,6 +200,8 @@
 			    input = group.find('input[name], select[name]'),
 			    pick = form.find('.rdf-picked [data-clear="' + id + '"]'),
 			    clear = group.find('[data-clear="' + id + '"]');
+
+				console.log($('#' + id).attr('class'));
 
 		    if(input.is(':checkbox') || input.is(':radio')) {
 			    input.prop('checked', false);
@@ -79,6 +225,8 @@
 			    }
 			    input.val('');
 		    }
+
+		
 		    if(submit) {
 			    if(options.search_mode === 'auto') {
 				    form.submit();
@@ -88,6 +236,13 @@
 		    }
 		    pick.remove();
 		    clear.remove();
+
+			
+
+			
+
+			
+
 	    };
 
 	    //Disable empty inputs before submit
@@ -135,6 +290,52 @@
 		    e.preventDefault();
 		    form.find('.rdf-filters input, .rdf-filters select').each(function(index) {
 			    clearFilter($(this).data('id'), false);
+
+				var citySelected = $('.nav_top_values .cities .city_selected').text().trim();
+
+				$('.magazines_select .cities .city_selected').html(citySelected);
+			
+				var magazines_select = $('.magazines_select .cities .city_selected').text().trim();
+			
+				console.log('magazines_select ' + magazines_select);
+			
+				var curMagazine = magazines_select;
+				$('.magazines_text').removeClass('m_checked');
+				if($('.rdf-filters').length > 0){
+			
+					$('.rdf-filters .panel-group .panel').each(function(){
+						var titleParam = $(this).find('.panel-title').text().trim();
+			
+						if(curMagazine == titleParam){
+							$('.rdf-filters .panel-collapse.collapse:not(.in)').removeClass('show');
+							var optionLength =$(this).find('input[type="checkbox"]').length;
+			
+					
+							$('.magazines_text span').html('('+optionLength+')');
+							$('.magazines_text').addClass('m_checked');
+			
+							$('.rdf-filters .panel-group .panel .panel-collapse:not(.cur_magazine)').find('input[type="checkbox"]').prop('checked',false);
+							$(this).find('input[type="checkbox"]').removeAttr('disabled');
+							$(this).find('input[type="checkbox"]').prop('checked',true);
+			
+								$('#rdrf-form32').submit();
+					
+	
+				
+			
+								$(this).find('.panel-collapse.collapse').addClass('show cur_magazine');
+			
+		
+	
+	
+						
+			
+						}
+			
+					});
+			
+				}
+
 		    });
 		    form.submit();
 	    });
@@ -231,6 +432,16 @@
 			    success: function(data) {
 				    popover.find('span').html(data);
 				    showPopper(popperOffset);
+
+					
+					var textBtn = $('.dream-filter .popper span').text().trim();
+											
+					var textBtnSplit = textBtn.split(' ');
+
+					var countProduct = textBtnSplit[1]
+					
+					$('.dream-filter .popper button').text('Показать' + ' ('+countProduct+')');
+
 			    },
 			    complete : function() {
 					if (typeof $.fn.button === 'function') {
@@ -513,6 +724,10 @@
                             }
                     }
                 }
+
+
+			
+
             } catch(e) {
                 console.error("Display error " + e.name + ":" + e.message + "\n" + e.stack);
             }
@@ -551,7 +766,7 @@
 	                if (typeof $.fn.button === 'function') {
 		                form.find('.rdf-footer button').button('loading');
 	                }
-                    $(options.ajax.selector).addClass('rdf-loading');
+                    // $(options.ajax.selector).addClass('rdf-loading');
                     if($('#grid-view').length) {
 	                    grid_btn = $('#grid-view').clone(true);
                     }
@@ -632,6 +847,8 @@
 	                    options.callbackAfter(html);
                     }
 	                ajaxInit();
+
+					$('.product_content').addClass('showed');
                 },
                 error: function( jqXHR, textStatus, errorThrown ) {
                     console.error('jqXHR', jqXHR);
@@ -868,11 +1085,13 @@
                     }
                 });
                 $.each(picked, function(i, pick) {
-                    form.find('.rdf-picked').append(
-                        '<button type="button" data-clear="' + pick.id + '" class="btn btn-default btn-xs">' +
-                        (pick.name ? (pick.name + ': ') : '') + pick.value +
-                        '<i>&times;</i></button>'
-                    );
+					if(pick.name != 'Интернет-магазин' && pick.name != 'Москва' && pick.name != 'Санкт-Петербург' && pick.name != 'Казань') {
+						form.find('.rdf-picked').append(
+							'<button type="button" data-clear="' + pick.id + '" class="btn btn-default btn-xs">' +
+							 pick.value +
+							'<div class="btn_close"><img src="/image/cross.svg" alt="убрать фильтр"></div>'
+						);
+					}
                 });
             }
         };

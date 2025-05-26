@@ -72,6 +72,7 @@ class ControllerSettingStore extends Controller {
 
 			$this->load->model('setting/setting');
 
+		
 			$this->model_setting_setting->editSetting('config', $this->request->post, $this->request->get['store_id']);
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -535,6 +536,9 @@ class ControllerSettingStore extends Controller {
 		} else {
 			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 		}
+
+
+		$data['addresses'] = $this->model_setting_setting->getAdresses($this->request->get['store_id']);
 
 		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 

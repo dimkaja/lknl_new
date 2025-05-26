@@ -108,6 +108,11 @@ class ControllerAccountSimpleRegister extends SimpleController {
             $tmpCustomerGroupId = $this->config->get('config_customer_group_id');
             $this->config->set('config_customer_group_id', $info['customer_group_id']);
 
+			// echo '<pre>';
+			// print_r($info);
+			// echo '</pre>';
+			// exit;
+
             $this->model_account_customer->addCustomer($info);
 
             $this->config->set('config_customer_group_id', $tmpCustomerGroupId);

@@ -111,6 +111,7 @@
                   <?php } ?>
                 </div>
               </div>
+              
               <div class="form-group">
                 <label class="col-sm-2 control-label" for="input-sku"><span data-toggle="tooltip" title="<?php echo $help_sku; ?>"><?php echo $entry_sku; ?></span></label>
                 <div class="col-sm-10">
@@ -147,6 +148,21 @@
                   <input type="text" name="mpn" value="<?php echo $mpn; ?>" placeholder="<?php echo $entry_mpn; ?>" id="input-mpn" class="form-control" />
                 </div>
               </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-sizes"><span data-toggle="tooltip" title="Использовать обмер">Использовать обмер</span></label>
+                <div class="col-sm-10">
+                    <select name="sizes_id" id="input-sizes" class="form-control">
+                        <option value="0">Не выбрано</option>
+                        <?php foreach ($sizess as $sizes) { ?>
+                            <?php if ($sizes['sizes_id'] == $sizes_id) { ?>
+                                <option value="<?php echo $sizes['sizes_id']; ?>" selected="selected"><?php echo $sizes['name']; ?></option>
+                            <?php } else { ?>
+                                <option value="<?php echo $sizes['sizes_id']; ?>"><?php echo $sizes['name']; ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label" for="input-location"><?php echo $entry_location; ?></label>
                 <div class="col-sm-10">

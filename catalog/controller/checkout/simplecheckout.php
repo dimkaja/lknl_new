@@ -11,11 +11,30 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
 
     public function index($args = null) {
 
+
+
         $this->loadLibrary('simple/simplecheckout');
 
         $settingsGroup = !empty($args['group']) ? $args['group'] : (!empty($this->request->get['group']) ? $this->request->get['group'] : $this->config->get('simple_default_checkout_group'));
 
         $this->simplecheckout = SimpleCheckout::getInstance($this->registry, $settingsGroup);
+
+        
+        //если клиент в ЛК и если у него нет адреса
+
+        if($this->customer->isLogged()){
+
+            $customer_id = $this->customer->getId();
+
+            $hasAddress = $this->db->query("SELECT * FROM ".DB_PREFIX."address WHERE customer_id = '".(int)$customer_id."'");
+
+            if(!$hasAddress->num_rows){
+
+                $this->simplecheckout->redirect($this->url->link('account/address','','SSL'));
+
+            }
+
+        }
 
         if (!$this->customer->isLogged() && $this->simplecheckout->isGuestCheckoutDisabled()) {
             $this->session->data['redirect'] = $this->url->link('checkout/simplecheckout', '', 'SSL');

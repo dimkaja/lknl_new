@@ -529,7 +529,7 @@ class ControllerProductSearch extends Controller {
 					$output = json_encode(array(
 						'html' => $html,
 						'filters' => $filters
-					));
+					)); 
 					if(($json_error = json_last_error()) !== JSON_ERROR_NONE) {
 						$output = 'JSON ERROR ' . $json_error;
 					}

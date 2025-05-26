@@ -8,7 +8,7 @@
 	<file path="catalog/controller/product/{category,manufacturer,search}.php">
 		<operation>
 			<ignoreif><![CDATA[$product_total = $this->model_catalog_product->getTotalProducts]]></ignoreif>
-			<search><![CDATA[$results = $this->model_catalog_product->getProducts]]></search>
+			<search><![CDATA[$products = $this->model_catalog_product->getProducts]]></search>
 			<add position="before"><![CDATA[
 			//Dream filter begin
 			$filter_data['rdrf'] = isset($this->request->get['rdrf']) ? $this->request->get['rdrf'] : array();
@@ -102,7 +102,7 @@
 					$output = json_encode(array(
 						'html' => $html,
 						'filters' => $filters
-					));
+					)); 
 					if(($json_error = json_last_error()) !== JSON_ERROR_NONE) {
 						$output = 'JSON ERROR ' . $json_error;
 					}

@@ -15,6 +15,13 @@ class ControllerCommonHeader extends Controller {
 			}
 		}
 
+		
+		if(isset($this->session->data['store'])){
+			$store_id = $this->session->data['store'];
+		} else {
+			$store_id = 0;
+		} 
+
 		if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
 			$server = $this->config->get('config_ssl');
 		} else {
@@ -55,13 +62,24 @@ class ControllerCommonHeader extends Controller {
 			$this->load->model('account/wishlist');
 
 			$data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), $this->model_account_wishlist->getTotalWishlist());
+
+			$data['count_wish'] = $this->model_account_wishlist->getTotalWishlist();
 		} else {
 			$data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
+
+			if(isset($this->session->data['wishlist'])){
+				$data['count_wish'] = count($this->session->data['wishlist']);
+			} else {
+				$data['count_wish'] = 0;
+			}
+	
 		}
 
 		$this->load->model('catalog/product');
 
 		$data['cities'] = $this->model_catalog_product->getStores();
+
+		$data['count_cart'] = $this->cart->countProducts();
 
 		$informations = array();
 
@@ -124,89 +142,146 @@ class ControllerCommonHeader extends Controller {
 		$this->load->model('catalog/product');
 
 		$data['categories'] = array();
+		
+		$categories = $this->model_catalog_category->getCategories();
 
-		if(!isset($this->session->data['store'])){
-			$categories = $this->model_catalog_category->getCategories(0);
+		foreach ($categories as $category) {
+			$category_id = $category['category_id'];
+			$category_info = $this->model_catalog_category->getCategory($category_id);
 
-			foreach ($categories as $category) {
-				if ($category['top']) {
-					// Level 2
-					$children_data = array();
-	
-					$children = $this->model_catalog_category->getCategories($category['category_id']);
-	
+			if ($category['top']) {
+				// Level 2
+				$children_data = array();
+
+				$children = $this->model_catalog_category->getCategories($category['category_id']);
+
+				if($children){
 					foreach ($children as $child) {
+
+						$child_category_info = $this->model_catalog_category->getCategory($child['category_id']);
+
+
 						$filter_data = array(
 							'filter_category_id'  => $child['category_id'],
 							'filter_sub_category' => true
 						);
 	
 						$children_data[] = array(
-							'name'  => $child['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
+							'name'  => $child_category_info['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
 							'href'  => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'])
 						);
 					}
-	
-					// Level 1
-					$data['categories'][] = array(
-						'name'     => $category['name'],
-						'children' => $children_data,
-						'column'   => $category['column'] ? $category['column'] : 1,
-						'href'     => $this->url->link('product/category', 'path=' . $category['category_id'])
-					);
 				}
-			}
+	
 
-			$data['store_selected'] = $this->model_catalog_category->getStore(0);
+				// Level 1
+				$data['categories'][] = array(
+					'name'     => $category_info['name'],
+					'children' => $children_data,
+					'text_all' => $category_info['text_all'],
+					'column'   => $category_info['column'] ? $category_info['column'] : 1,
+					'href'     => $this->url->link('product/category', 'path=' . $category_info['category_id'])
+				);
+			}
+		}
+
+
+
+		$data['store_selected'] = $this->model_catalog_category->getStore($store_id);
+		
+
+
+		// if(!isset($this->session->data['store'])){
+		// 	$categories = $this->model_catalog_category->getCategories(0);
+
+		// 	foreach ($categories as $category) {
+		// 		if ($category['top']) {
+		// 			// Level 2
+		// 			$children_data = array();
+	
+		// 			$children = $this->model_catalog_category->getCategories($category['category_id']);
+	
+		// 			foreach ($children as $child) {
+		// 				$filter_data = array(
+		// 					'filter_category_id'  => $child['category_id'],
+		// 					'filter_sub_category' => true
+		// 				);
+	
+		// 				$children_data[] = array(
+		// 					'name'  => $child['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
+		// 					'href'  => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'])
+		// 				);
+		// 			}
+	
+		// 			// Level 1
+		// 			$data['categories'][] = array(
+		// 				'name'     => $category['name'],
+		// 				'children' => $children_data,
+		// 				'column'   => $category['column'] ? $category['column'] : 1,
+		// 				'href'     => $this->url->link('product/category', 'path=' . $category['category_id'])
+		// 			);
+		// 		}
+		// 	}
+
+		// 	$data['store_selected'] = $this->model_catalog_category->getStore(0);
 
 			
 
-		} else {
-			$store_id = $this->session->data['store'];
-			$categories = $this->model_catalog_category->getCategoriesByStore($store_id);
+		// } else {
+		// 	$store_id = $this->session->data['store'];
+		// 	$categories = $this->model_catalog_category->getCategoriesByStore($store_id);
 
-			foreach($categories as $category){
+		
 
-				$category_id = $category['category_id'];
-				$category_info = $this->model_catalog_category->getCategory($category_id);
+		// 	foreach($categories as $category){
 
-				if ($category_info['top']) {
-					// Level 2
-					$children_data = array();
+		// 		$category_id = $category['category_id'];
+		// 		$category_info = $this->model_catalog_category->getCategory($category_id);
+		
+		// 		if ($category_info['top']) {
+		// 			// Level 2
+		// 			$children_data = array();
 	
-					$children = $this->model_catalog_category->getCategories($category_info['category_id']);
+		// 			$children = $this->model_catalog_category->getCategoriesChildByStore($store_id,$category_info['category_id']);
+				
+		// 			foreach ($children as $child) {
+		// 				$filter_data = array(
+		// 					'filter_category_id'  => $child['category_id'],
+		// 					'filter_sub_category' => true
+		// 				);
 	
-					foreach ($children as $child) {
-						$filter_data = array(
-							'filter_category_id'  => $child['category_id'],
-							'filter_sub_category' => true
-						);
-	
-						$children_data[] = array(
-							'name'  => $child['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
-							'href'  => $this->url->link('product/category', 'path=' . $category_info['category_id'] . '_' . $child['category_id'])
-						);
-					}
-	
-					// Level 1
-					$data['categories'][] = array(
-						'name'     => $category_info['name'],
-						'children' => $children_data,
-						'column'   => $category_info['column'] ? $category_info['column'] : 1,
-						'href'     => $this->url->link('product/category', 'path=' . $category_info['category_id'])
-					);
-				}
-			}
+		// 				$children_data[] = array(
+		// 					'name'  => $child['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
+		// 					'href'  => $this->url->link('product/category', 'path=' . $category_info['category_id'] . '_' . $child['category_id'])
+		// 				);
+		// 			}
+			
+		// 			// Level 1
+		// 			$data['categories'][] = array(
+		// 				'name'     => $category_info['name'],
+		// 				'children' => $children_data,
+		// 				'text_all' => $category_info['text_all'],
+		// 				'column'   => $category_info['column'] ? $category_info['column'] : 1,
+		// 				'href'     => $this->url->link('product/category', 'path=' . $category_info['category_id'])
+		// 			);
+		// 		}
+		// 	}
+		// 	echo '<pre>';
+		// 	print_r($categories);
+		// 	echo '</pre>';
+		// 	$data['store_selected'] = $this->model_catalog_category->getStore($this->session->data['store']);
 
-			$data['store_selected'] = $this->model_catalog_category->getStore($this->session->data['store']);
+		// }
 
-		}
-	
+
+
 
 		$data['language'] = $this->load->controller('common/language');
 		$data['currency'] = $this->load->controller('common/currency');
 		$data['search'] = $this->load->controller('common/search');
 		$data['cart'] = $this->load->controller('common/cart');
+		$data['cart_link'] = $this->url->link('checkout/cart');
+		$data['wish_link'] = $this->url->link('checkout/cart','index=1');
 
 		// For page specific css
 		if (isset($this->request->get['route'])) {
@@ -223,23 +298,29 @@ class ControllerCommonHeader extends Controller {
 			}
 
 			$data['class'] = str_replace('/', '-', $this->request->get['route']) . $class;
+
+			$data['route'] = $this->request->get['route'];
+
 		} else {
 			$data['class'] = 'common-home';
+			$data['route'] = '';
 		}
 
 		return $this->load->view('common/header', $data);
 	}
+	
 
 	public function selectCity() {
 
-		ini_set('display_errors', 1);
-		ini_set('display_startup_errors', 1);
-		ini_set('log_errors', true);
-		error_reporting(E_ALL);
+		// ini_set('display_errors', 1);
+		// ini_set('display_startup_errors', 1);
+		// ini_set('log_errors', true);
+		// error_reporting(E_ALL);
 
 		$json = array();
 
 		$store_id = $this->request->post['store_id'];
+		
 
 		if(isset($this->session->data['store'])){
 			unset($this->session->data['store']);
@@ -251,42 +332,49 @@ class ControllerCommonHeader extends Controller {
 		$this->load->model('catalog/category');
 		$this->load->model('catalog/product');
 
-		$categories = $this->model_catalog_category->getCategoriesByStore($store_id);
+
 
 		$data['categories'] = array();
+		
+		$categories = $this->model_catalog_category->getCategories();
 
-		if($categories){
-			foreach($categories as $category){
+		foreach ($categories as $category) {
+			$category_id = $category['category_id'];
+			$category_info = $this->model_catalog_category->getCategory($category_id);
 
-				$category_id = $category['category_id'];
-				$category_info = $this->model_catalog_category->getCategory($category_id);
+			if ($category['top']) {
+				// Level 2
+				$children_data = array();
 
-				if ($category_info['top']) {
-					// Level 2
-					$children_data = array();
-	
-					$children = $this->model_catalog_category->getCategories($category_info['category_id']);
-	
+				$children = $this->model_catalog_category->getCategories($category['category_id']);
+
+				if($children){
 					foreach ($children as $child) {
+
+						$child_category_info = $this->model_catalog_category->getCategory($child['category_id']);
+
+
 						$filter_data = array(
 							'filter_category_id'  => $child['category_id'],
 							'filter_sub_category' => true
 						);
 	
 						$children_data[] = array(
-							'name'  => $child['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
-							'href'  => $this->url->link('product/category', 'path=' . $category_info['category_id'] . '_' . $child['category_id'])
+							'name'  => $child_category_info['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
+							'href'  => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'])
 						);
 					}
-	
-					// Level 1
-					$data['categories'][] = array(
-						'name'     => $category_info['name'],
-						'children' => $children_data,
-						'column'   => $category_info['column'] ? $category_info['column'] : 1,
-						'href'     => $this->url->link('product/category', 'path=' . $category_info['category_id'])
-					);
 				}
+	
+
+				// Level 1
+				$data['categories'][] = array(
+					'name'     => $category_info['name'],
+					'children' => $children_data,
+					'text_all' => $category_info['text_all'],
+					'column'   => $category_info['column'] ? $category_info['column'] : 1,
+					'href'     => $this->url->link('product/category', 'path=' . $category_info['category_id'])
+				);
 			}
 		}
 		$page = 1;

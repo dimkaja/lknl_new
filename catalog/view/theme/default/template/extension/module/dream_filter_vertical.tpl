@@ -26,6 +26,54 @@
  */
 ?>
 <section class="dream-filter filter-vertical rdf-side-<?= $view['mobile']['side'] ?>" id="<?= $settings['widget_id'] ?>">
+  
+    <div class="filter_content">
+
+    <div class="top_filter_content">
+        <button class="close_filter"><img src="/image/cross.svg" alt="close button"></button>
+    </div>
+    <div class="magazines_select">
+        <p class="magazines_text">Магазины<span></span></p>
+        <?php if($cities) { ?>  
+            <div class="cities">
+              <div class="city_select">
+
+                <?php if($store_selected) { ?>
+                 <div class="city_selected"><?php echo $store_selected['name']; ?></div>
+                <?php } else  { ?>
+                  <div class="city_selected">Интернет-магазин/div>
+                <?php } ?> 
+                <ul>
+                  <?php if($store_selected) { ?>
+    
+                    <?php foreach($cities as $city) { ?>  
+                      <?php if($city['store_id'] == $store_selected['store_id']) { ?>
+                        <li data-value="<?php echo $city['store_id']; ?>" class="checked"><?php echo $city['name']; ?></li>
+                      <?php } else { ?>
+                        <li data-value="<?php echo $city['store_id']; ?>"><?php echo $city['name']; ?></li>
+                      <?php } ?>
+                     
+                    <?php } ?>  
+                    <li data-value="0">Интернет-магазин</li>
+    
+                  <?php } else { ?>
+                    <?php foreach($cities as $city) { ?>  
+                      <?php if($city['store_id'] == $store_selected) { ?>
+                        <li data-value="<?php echo $city['store_id']; ?>" class="checked"><?php echo $city['name']; ?></li>
+                      <?php } else { ?>
+                        <li data-value="<?php echo $city['store_id']; ?>"><?php echo $city['name']; ?></li>
+                      <?php } ?>
+                     
+                    <?php } ?>  
+                    <li data-value="0" class="checked">Интернет-магазин</li>
+                  <?php } ?>
+    
+                </ul>
+              </div>
+    
+            </div>   
+           <?php } ?> 
+    </div>
     <?php if($view['mobile']['mode'] !== 'none') { ?>
         <button id="<?= $view['mobile']['button_id'] ?>" type="button" class="btn btn-block rdf-mobile-toggle <?= $view['btn-primary'] ?>">
             <?= html_entity_decode($mobile_button_text) ?>
@@ -35,25 +83,29 @@
         <?php foreach ($hidden as $name => $value) { ?>
             <input type="hidden" name="<?= $name ?>" value="<?= $value ?>">
         <?php } ?>
-        <?php if($title) : ?>
-            <div class="rdf-header">
-                <h3><?= $title ?></h3>
-            </div>
-        <?php endif; ?>
+ 
         <div class="rdf-body">
             <?php if($filters) { ?>
                 <div class="rdf-filters">
                     <div class="rdf-picked">
                         <?php foreach ($picked as $pick) { ?>
+                            <?php if($pick['name'] != 'Интернет-магазин' && $pick['name'] != 'Москва' && $pick['name'] != 'Санкт-Петербург' && $pick['name'] != 'Казань' ) { ?>
+                     
                             <button type="button" data-clear="<?= $pick['id'] ?>" class="btn btn-default btn-xs">
-                                <?= ($pick['name'] ? $pick['name'] . ': ' : '') . $pick['value'] ?><i>&times;</i>
+                                <?php echo $pick['value'] ?><div class="btn_close"><img src="/image/cross.svg" alt="убрать фильтр"></div>
                             </button>
+                            <?php } ?>
                         <?php } ?>
                     </div>
                     <div class="panel-group">
                         <?php foreach($filters as $filter) { ?>
                             <div class="panel panel-default" id="<?= $filter['id'] ?>" <?= $filter['hide'] ? 'style="display:none"' : '' ?>>
-                                <div class="panel-heading">
+                                <?php if($filter['title'] == 'Размер' || $filter['title'] == 'Цвет' || $filter['title'] == 'Скидка') { ?>
+                                    <?php $class = 'show'; ?>
+                                <?php } else { ?>
+                                    <?php $class = ''; ?>
+                                <?php } ?>
+                                <div class="panel-heading <?php echo $class; ?>">
                                     <strong class="panel-title">
                                         <span data-toggle="collapse" class="<?= $filter['open'] ? '' : 'collapsed' ?>" data-target="#<?= $filter['id'] ?>-collapse">
 	                                        <svg width="16px" height="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
@@ -63,6 +115,8 @@
                                         </span>
                                     </strong>
                                 </div>
+
+                     
                                 <div id="<?= $filter['id'] ?>-collapse" class="panel-collapse collapse<?= $filter['open'] ? ' in' : '' ?>">
                                     <div class="panel-body">
                                         <div class="form-group <?= $filter['truncate'] ?>">
@@ -127,9 +181,13 @@
                                                     <?php break; ?>
                                                     <?php case 'checkbox': ?>
                                                         <?php foreach($filter['values'] as $k => $value) { ?>
+
+                                                            
+
                                                             <div id="<?= $value['id'] ?>" class="checkbox rdf-val" <?= $value['hide'] ? 'style="display:none"' : '' ?>>
                                                                 <label>
                                                                     <input type="checkbox" name="<?= $filter['name'] ?>[]" value="<?= $value['val'] ?>" <?= $value['attributes'] ?>>
+                                                                    <span class="check_input"></span>
                                                                     <span><?= $value['name'] ?></span>
                                                                 </label>
                                                                 <?= $value['checked'] ? '<span class="rdf-clear" data-clear="' . $value['id'] . '">&times;</span>' : '' ?>
@@ -201,6 +259,7 @@
             </div>
         <?php } ?>
     </form>
+</div>
     <?php if($popper['enable']) { ?>
         <div class="popper" id="<?= $popper['id'] ?>">
             <span></span>
